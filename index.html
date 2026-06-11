@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bramantyo Raka — Data Insights Hub</title>
+  <meta name="description" content="Data Analyst & Scientist specializing in Telecom Network Performance, Dashboard & Automation, Android & Web Development." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,200;0,300;0,400;0,700;0,800;1,300;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500;600&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --ink:      #0b0b0b;
+      --cream:    #f2ede4;
+      --paper:    #faf8f4;
+      --stone:    #8a8680;
+      --rule:     rgba(11,11,11,0.10);
+      --rule-inv: rgba(242,237,228,0.12);
+      --max:      1200px;
+      --gap:      clamp(24px, 5vw, 72px);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--gap); height: 60px;
+      background: rgba(250,248,244,0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 18px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--stone); transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--ink); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column;
+      padding-top: 60px; overflow: hidden;
+      color: var(--cream);
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('assets/hero-bg.jpg');
+      background-size: cover; background-position: center 30%;
+      transform: scale(1.04);
+      transition: transform 8s ease;
+    }
+    .hero-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(11,11,11,0.72) 0%,
+        rgba(11,11,11,0.55) 50%,
+        rgba(11,11,11,0.88) 100%);
+    }
+    .hero-bg.loaded { transform: scale(1.0); }
+    .hero-content {
+      position: relative; z-index: 2; flex: 1;
+      display: grid; grid-template-columns: 1fr 420px;
+      gap: 60px; align-items: flex-end;
+      max-width: var(--max); margin: 0 auto;
+      padding: clamp(60px,10vw,120px) var(--gap) 48px;
+      width: 100%;
+    }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    }
+    .hero-eyebrow-line { width: 32px; height: 1px; background: rgba(242,237,228,0.45); }
+    .hero-eyebrow-text {
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(242,237,228,0.55);
+    }
+    .hero-title {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+      font-size: clamp(72px,11vw,148px); line-height: 0.91;
+      letter-spacing: 0.01em; text-transform: uppercase; margin-bottom: 8px;
+    }
+    .hero-title-sub {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 200;
+      font-size: clamp(52px,8vw,108px); line-height: 0.95;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(242,237,228,0.6); margin-bottom: 36px;
+    }
+    .hero-italic-line {
+      font-family: 'EB Garamond', Georgia, serif; font-style: italic;
+      font-size: clamp(22px,3vw,34px); font-weight: 400;
+      color: rgba(242,237,228,0.85); margin-bottom: 40px; line-height: 1.3;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px;
+      font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      border: 1px solid rgba(242,237,228,0.35); color: rgba(242,237,228,0.85);
+      transition: background 0.2s, border-color 0.2s, color 0.2s; cursor: pointer;
+    }
+    .btn:hover { background: rgba(242,237,228,0.1); border-color: rgba(242,237,228,0.7); color: var(--cream); }
+    .btn-solid { background: var(--cream); border-color: var(--cream); color: var(--ink); }
+    .btn-solid:hover { background: rgba(242,237,228,0.88); color: var(--ink); }
+
+    .hero-right { display: flex; flex-direction: column; gap: 1px; align-self: flex-end; }
+    .hero-id-card {
+      background: rgba(11,11,11,0.55); backdrop-filter: blur(12px);
+      border: 1px solid var(--rule-inv); padding: 24px 24px 24px 20px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .hero-avatar-wrap {
+      width: 100px; height: 100px; border-radius: 50%;
+      overflow: hidden; flex-shrink: 0; border: 1px solid var(--rule-inv);
+    }
+    .hero-avatar-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .hero-id-name {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 19px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 5px;
+    }
+    .hero-id-role { font-size: 11px; color: rgba(242,237,228,0.45); line-height: 1.55; letter-spacing: 0.03em; }
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
+    .stat-card {
+      background: rgba(11,11,11,0.55); backdrop-filter: blur(12px);
+      border: 1px solid var(--rule-inv); padding: 20px 22px;
+    }
+    .stat-num {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+      font-size: 44px; line-height: 1; letter-spacing: 0.02em;
+    }
+    .stat-sup { font-size: 20px; font-weight: 300; color: rgba(242,237,228,0.4); }
+    .stat-label {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(242,237,228,0.4); margin-top: 5px;
+    }
+    .hero-bar {
+      position: relative; z-index: 2;
+      max-width: var(--max); margin: 0 auto; width: 100%;
+      padding: 20px var(--gap);
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--rule-inv);
+    }
+    .hero-scroll {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 10px; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(242,237,228,0.35);
+    }
+    .scroll-tick { width: 36px; height: 1px; background: rgba(242,237,228,0.25); }
+    .hero-socials { display: flex; gap: 24px; }
+    .hero-socials a {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: rgba(242,237,228,0.35); transition: color 0.2s;
+    }
+    .hero-socials a:hover { color: rgba(242,237,228,0.8); }
+
+    /* ── SECTION COMMON ── */
+    .wrap { max-width: var(--max); margin: 0 auto; padding: clamp(72px,11vw,128px) var(--gap); }
+    .section-head { margin-bottom: 56px; }
+    .section-label {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--stone);
+      display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+    }
+    .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--stone); }
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+      font-size: clamp(48px,7vw,96px); line-height: 0.92;
+      letter-spacing: 0.01em; text-transform: uppercase;
+    }
+    .section-title-thin {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 200;
+      font-size: clamp(48px,7vw,96px); line-height: 0.92;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(11,11,11,0.28);
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--paper); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(48px,7vw,96px); align-items: start; }
+    .about-body p { font-size: 15px; line-height: 1.85; color: #3a3a3a; margin-bottom: 18px; }
+    .about-body p:last-child { margin-bottom: 0; }
+    .about-body strong { color: var(--ink); font-weight: 600; }
+    .about-langs {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-top: 24px; padding-top: 24px;
+      border-top: 1px solid var(--rule);
+    }
+    .lang-badge {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+      padding: 5px 12px; border: 1px solid var(--rule); color: var(--stone);
+    }
+
+    .skills-panel {}
+    .skill-group { border-top: 1px solid var(--rule); padding: 22px 0; }
+    .skill-group:last-child { border-bottom: 1px solid var(--rule); }
+    .skill-group-name {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--stone); margin-bottom: 12px;
+    }
+    .pills { display: flex; flex-wrap: wrap; gap: 7px; }
+    .pill { padding: 5px 13px; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; background: var(--ink); color: var(--cream); }
+    .pill-o { padding: 5px 13px; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; border: 1px solid rgba(11,11,11,0.18); color: #555; }
+
+    /* ── STRIPE ── */
+    .stripe { background: var(--ink); overflow: hidden; }
+    .stripe-inner { max-width: var(--max); margin: 0 auto; padding: clamp(56px,8vw,96px) var(--gap); }
+    .stripe-q {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+      font-size: clamp(40px,6.5vw,82px); line-height: 0.94;
+      letter-spacing: 0.01em; text-transform: uppercase; color: var(--cream);
+    }
+    .stripe-q em {
+      font-family: 'EB Garamond', Georgia, serif; font-style: italic;
+      font-weight: 400; font-size: 1.08em;
+      color: rgba(242,237,228,0.55); text-transform: none;
+    }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--cream); }
+    #projects .wrap { padding-bottom: 0; }
+    .proj-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: rgba(11,11,11,0.12); }
+    .proj-card {
+      background: var(--cream); display: flex; flex-direction: column;
+      cursor: pointer; overflow: hidden; transition: background 0.3s;
+    }
+    .proj-card:hover { background: var(--ink); color: var(--cream); }
+    .proj-img { width: 100%; height: 210px; overflow: hidden; position: relative; }
+    .proj-img img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center;
+      transition: transform 0.55s ease; filter: grayscale(30%);
+    }
+    .proj-card:hover .proj-img img { transform: scale(1.06); filter: grayscale(0%); }
+    .proj-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(11,11,11,0.1), rgba(11,11,11,0.5));
+      transition: opacity 0.3s;
+    }
+    .proj-card:hover .proj-img-overlay { opacity: 0.4; }
+    .proj-img-fallback {
+      width: 100%; height: 210px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #0d1a0d 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'EB Garamond', serif; font-style: italic;
+      font-size: 48px; color: rgba(242,237,228,0.12); letter-spacing: -0.02em;
+    }
+    .proj-body { padding: 26px 28px 28px; flex: 1; display: flex; flex-direction: column; }
+    .proj-index {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.18em;
+      color: rgba(11,11,11,0.2); margin-bottom: 10px; transition: color 0.3s;
+    }
+    .proj-card:hover .proj-index { color: rgba(242,237,228,0.2); }
+    .proj-title {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 20px; letter-spacing: 0.05em; line-height: 1.1;
+      text-transform: uppercase; margin-bottom: 10px; transition: color 0.3s;
+    }
+    .proj-desc { font-size: 13px; line-height: 1.65; color: #666; flex: 1; transition: color 0.3s; }
+    .proj-card:hover .proj-desc { color: rgba(242,237,228,0.5); }
+    .proj-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 22px; }
+    .proj-tag {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 4px 10px; background: rgba(11,11,11,0.07); color: #555; transition: background 0.3s, color 0.3s;
+    }
+    .proj-card:hover .proj-tag { background: rgba(242,237,228,0.08); color: rgba(242,237,228,0.45); }
+    .proj-arrow { font-size: 18px; color: rgba(11,11,11,0.2); transition: color 0.3s, transform 0.3s; }
+    .proj-card:hover .proj-arrow { color: rgba(242,237,228,0.5); transform: translateX(4px); }
+
+    /* ── EXPERIENCE ── */
+    #experience { background: var(--paper); }
+    .exp-list {}
+    .exp-row { display: grid; grid-template-columns: 200px 1fr; gap: 48px; padding: 40px 0; border-top: 1px solid var(--rule); }
+    .exp-row:last-child { border-bottom: 1px solid var(--rule); }
+    .exp-meta {}
+    .exp-period { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: var(--stone); margin-bottom: 6px; }
+    .exp-badge {
+      display: inline-block; font-size: 9px; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 3px 8px; border: 1px solid rgba(11,11,11,0.15); color: var(--stone);
+    }
+    .exp-badge.current {
+      background: var(--ink); border-color: var(--ink); color: var(--cream);
+    }
+    .exp-role {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 26px; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 3px;
+    }
+    .exp-org {
+      font-family: 'EB Garamond', serif; font-style: italic;
+      font-size: 15px; color: var(--stone); margin-bottom: 14px;
+    }
+    .exp-desc { font-size: 14px; line-height: 1.75; color: #444; max-width: 580px; }
+    .exp-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+    .chip {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 4px 10px; border: 1px solid var(--rule); color: var(--stone);
+    }
+
+    /* education subsection */
+    .edu-section { margin-top: 72px; }
+    .edu-list {}
+    .edu-row { display: grid; grid-template-columns: 200px 1fr; gap: 48px; padding: 32px 0; border-top: 1px solid var(--rule); }
+    .edu-row:last-child { border-bottom: 1px solid var(--rule); }
+    .edu-period { font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: var(--stone); padding-top: 4px; }
+    .edu-degree {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 22px; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 3px;
+    }
+    .edu-school {
+      font-family: 'EB Garamond', serif; font-style: italic;
+      font-size: 15px; color: var(--stone); margin-bottom: 10px;
+    }
+    .edu-detail { font-size: 13px; color: #666; line-height: 1.6; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--ink); color: var(--cream); position: relative; overflow: hidden; }
+    .contact-bg-word {
+      position: absolute; bottom: -0.05em; right: -0.05em;
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+      font-size: clamp(120px,20vw,260px); letter-spacing: -0.02em;
+      text-transform: uppercase; color: rgba(242,237,228,0.03); line-height: 1;
+      pointer-events: none; user-select: none;
+    }
+    .contact-wrap { position: relative; z-index: 2; max-width: var(--max); margin: 0 auto; padding: clamp(72px,11vw,128px) var(--gap); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(48px,7vw,96px); align-items: start; }
+    .contact-label {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(242,237,228,0.35); display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+    }
+    .contact-label::before { content: ''; display: block; width: 24px; height: 1px; background: rgba(242,237,228,0.25); }
+    .contact-title {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+      font-size: clamp(48px,7vw,96px); line-height: 0.92;
+      letter-spacing: 0.01em; text-transform: uppercase; color: var(--cream); margin-bottom: 28px;
+    }
+    .contact-tagline { font-size: 15px; line-height: 1.75; color: rgba(242,237,228,0.5); max-width: 380px; margin-bottom: 36px; }
+    .contact-email-link {
+      display: block; font-family: 'Barlow Condensed', sans-serif; font-weight: 300;
+      font-size: clamp(22px,3vw,34px); letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--cream); border-bottom: 1px solid rgba(242,237,228,0.2);
+      padding-bottom: 8px; margin-bottom: 36px; width: fit-content;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .contact-email-link:hover { border-color: rgba(242,237,228,0.6); color: rgba(242,237,228,0.8); }
+    .c-link-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 0; border-top: 1px solid var(--rule-inv);
+      transition: padding-left 0.2s; cursor: pointer;
+    }
+    .c-link-row:last-child { border-bottom: 1px solid var(--rule-inv); }
+    .c-link-row:hover { padding-left: 6px; }
+    .c-link-name { font-size: 13px; font-weight: 500; letter-spacing: 0.05em; color: rgba(242,237,228,0.8); }
+    .c-link-handle { font-size: 11px; color: rgba(242,237,228,0.3); letter-spacing: 0.04em; }
+    .contact-right { padding-top: 64px; }
+    .contact-big-num {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+      font-size: clamp(96px,15vw,180px); line-height: 0.88; letter-spacing: 0.01em;
+      color: rgba(242,237,228,0.06); margin-bottom: 36px; text-transform: uppercase;
+    }
+    .availability-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 20px; border: 1px solid var(--rule-inv);
+      font-size: 12px; letter-spacing: 0.08em; color: rgba(242,237,228,0.6);
+    }
+    .dot-pulse {
+      width: 7px; height: 7px; border-radius: 50%; background: #4ade80;
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(74,222,128,0.4); }
+      50%      { opacity:0.5; box-shadow:0 0 0 5px rgba(74,222,128,0); }
+    }
+
+    /* ── FOOTER ── */
+    footer { background: #070707; padding: 24px var(--gap); display: flex; align-items: center; justify-content: space-between; }
+    .f-left { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:14px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(242,237,228,0.2); }
+    .f-right { font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(242,237,228,0.15); }
+
+    /* ── REVEAL ── */
+    .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.6s ease,transform 0.6s ease; }
+    .reveal.in { opacity:1; transform:translateY(0); }
+    /* Safety: if JS fails or section is already in view, still show content */
+    @media (prefers-reduced-motion: reduce) { .reveal { opacity:1; transform:none; } }
+    .d1{transition-delay:0.08s} .d2{transition-delay:0.16s} .d3{transition-delay:0.24s} .d4{transition-delay:0.32s}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:960px){
+      .hero-content{grid-template-columns:1fr} .hero-right{display:none}
+      .about-grid{grid-template-columns:1fr} .proj-grid{grid-template-columns:1fr 1fr}
+      .exp-row{grid-template-columns:1fr;gap:8px} .edu-row{grid-template-columns:1fr;gap:8px}
+      .contact-grid{grid-template-columns:1fr} .contact-right{padding-top:0}
+      .nav-links{display:none}
+    }
+    @media(max-width:580px){ .proj-grid{grid-template-columns:1fr} }
+
+    /* ── MODAL ARTICLE ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(7,7,7,0.94);
+      backdrop-filter: blur(10px);
+      display: flex; justify-content: center;
+      overflow-y: auto;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 40px 16px;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      position: relative;
+      width: min(760px, 100%);
+      background: #111;
+      transform: translateY(24px);
+      transition: transform 0.38s ease;
+      align-self: flex-start;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+
+    /* sticky close bar */
+    .modal-topbar {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 28px;
+      background: rgba(17,17,17,0.97);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(242,237,228,0.07);
+    }
+    .modal-topbar-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(242,237,228,0.3);
+    }
+    .modal-close {
+      width: 32px; height: 32px;
+      border: 1px solid rgba(242,237,228,0.15);
+      background: none; color: rgba(242,237,228,0.5);
+      font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+    .modal-close:hover { background: rgba(242,237,228,0.08); color: var(--cream); }
+
+    /* hero image */
+    .modal-hero-img {
+      width: 100%; aspect-ratio: 16/7;
+      overflow: hidden;
+    }
+    .modal-hero-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    /* article body */
+    .modal-article {
+      padding: 48px 52px 64px;
+      color: var(--cream);
+    }
+    @media(max-width:600px){ .modal-article { padding: 32px 24px 48px; } }
+
+    .article-tag {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(242,237,228,0.35);
+      margin-bottom: 16px;
+    }
+    .article-title {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+      font-size: clamp(32px, 5vw, 52px); line-height: 0.95;
+      letter-spacing: 0.01em; text-transform: uppercase;
+      color: var(--cream); margin-bottom: 10px;
+    }
+    .article-subtitle {
+      font-family: 'EB Garamond', serif; font-style: italic;
+      font-size: 18px; color: rgba(242,237,228,0.5);
+      margin-bottom: 28px; line-height: 1.4;
+    }
+    .article-meta {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      padding-bottom: 28px; margin-bottom: 36px;
+      border-bottom: 1px solid rgba(242,237,228,0.08);
+    }
+    .article-meta-item {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      color: rgba(242,237,228,0.35);
+    }
+    .article-meta-item span { color: rgba(242,237,228,0.6); }
+
+    /* text blocks */
+    .article-section { margin-bottom: 40px; }
+    .article-h2 {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 22px; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--cream); margin-bottom: 14px;
+      padding-bottom: 10px; border-bottom: 1px solid rgba(242,237,228,0.07);
+    }
+    .article-p {
+      font-size: 15px; line-height: 1.82; color: rgba(242,237,228,0.65);
+      margin-bottom: 14px;
+    }
+    .article-p:last-child { margin-bottom: 0; }
+    .article-ul {
+      padding-left: 0; list-style: none; margin-bottom: 14px;
+    }
+    .article-ul li {
+      font-size: 14px; line-height: 1.7; color: rgba(242,237,228,0.6);
+      padding: 6px 0 6px 20px; position: relative;
+      border-bottom: 1px solid rgba(242,237,228,0.04);
+    }
+    .article-ul li::before {
+      content: '–'; position: absolute; left: 0;
+      color: rgba(242,237,228,0.25);
+    }
+    .article-ol {
+      padding-left: 0; list-style: none; counter-reset: ol; margin-bottom: 14px;
+    }
+    .article-ol li {
+      font-size: 14px; line-height: 1.7; color: rgba(242,237,228,0.6);
+      padding: 7px 0 7px 32px; position: relative; counter-increment: ol;
+      border-bottom: 1px solid rgba(242,237,228,0.04);
+    }
+    .article-ol li::before {
+      content: counter(ol, decimal-leading-zero);
+      position: absolute; left: 0;
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 13px; letter-spacing: 0.05em;
+      color: rgba(242,237,228,0.2);
+    }
+
+    /* inline image — full width with caption */
+    .article-img {
+      margin: 32px 0;
+    }
+    .article-img img {
+      width: 100%; display: block;
+      border: 1px solid rgba(242,237,228,0.06);
+    }
+    .article-img-caption {
+      font-size: 11px; letter-spacing: 0.06em;
+      color: rgba(242,237,228,0.25); margin-top: 8px;
+      padding-left: 2px;
+    }
+
+    /* stat callout */
+    .article-callout {
+      background: rgba(242,237,228,0.03);
+      border-left: 2px solid rgba(242,237,228,0.2);
+      padding: 16px 20px; margin: 24px 0;
+    }
+    .article-callout p {
+      font-family: 'EB Garamond', serif; font-style: italic;
+      font-size: 17px; line-height: 1.6; color: rgba(242,237,228,0.7);
+      margin: 0;
+    }
+
+    /* results table */
+    .article-table {
+      width: 100%; border-collapse: collapse; margin: 20px 0;
+      font-size: 13px;
+    }
+    .article-table th {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(242,237,228,0.35);
+      padding: 10px 14px; border-bottom: 1px solid rgba(242,237,228,0.1);
+      text-align: left;
+    }
+    .article-table td {
+      padding: 10px 14px; color: rgba(242,237,228,0.6);
+      border-bottom: 1px solid rgba(242,237,228,0.05);
+    }
+    .article-table tr:last-child td { border-bottom: none; }
+    .article-table td:first-child { color: rgba(242,237,228,0.85); font-weight: 500; }
+
+    /* proj-card cursor */
+    .proj-card { cursor: pointer; }
+  </style>
+
+  <style id="rtl-override"></style>
+  <style>
+    /* ── LANGUAGE SWITCHER ── */
+    .lang-switcher {
+      display: flex; align-items: center; gap: 4px;
+      margin-left: 24px;
+    }
+    .lang-btn {
+      padding: 4px 10px;
+      font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      border: 1px solid var(--rule); background: none;
+      color: var(--stone); cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .lang-btn:hover { color: var(--ink); border-color: var(--ink); }
+    .lang-btn.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+    /* ── RTL SUPPORT ── */
+    [dir="rtl"] .nav-links { flex-direction: row-reverse; }
+    [dir="rtl"] .hero-eyebrow { flex-direction: row-reverse; }
+    [dir="rtl"] .hero-eyebrow-line { margin-left: 0; margin-right: 0; }
+    [dir="rtl"] .section-label::before { display: none; }
+    [dir="rtl"] .section-label::after { content: ''; display: block; width: 24px; height: 1px; background: var(--stone); }
+    [dir="rtl"] .contact-label::before { display: none; }
+    [dir="rtl"] .contact-label::after { content: ''; display: block; width: 24px; height: 1px; background: rgba(242,237,228,0.25); }
+    [dir="rtl"] .hero-scroll { flex-direction: row-reverse; }
+    [dir="rtl"] .hero-socials { flex-direction: row-reverse; }
+    [dir="rtl"] .about-body p, [dir="rtl"] .article-p,
+    [dir="rtl"] .exp-desc, [dir="rtl"] .edu-detail,
+    [dir="rtl"] .contact-tagline, [dir="rtl"] .stripe-q { text-align: right; }
+    [dir="rtl"] .article-ul li, [dir="rtl"] .article-ol li { text-align: right; padding-right: 20px; padding-left: 0; }
+    [dir="rtl"] .article-ul li::before { right: 0; left: auto; }
+    [dir="rtl"] .article-ol li { padding-right: 36px; padding-left: 0; }
+    [dir="rtl"] .article-ol li::before { right: 0; left: auto; }
+    [dir="rtl"] .exp-row, [dir="rtl"] .edu-row { direction: rtl; }
+    [dir="rtl"] .proj-foot { flex-direction: row-reverse; }
+    [dir="rtl"] .c-link-row { flex-direction: row-reverse; }
+    [dir="rtl"] .c-link-row:hover { padding-right: 6px; padding-left: 0; }
+    [dir="rtl"] .hero-bar { flex-direction: row-reverse; }
+    [dir="rtl"] .modal-topbar { flex-direction: row-reverse; }
+    [dir="rtl"] .article-img-caption { text-align: right; }
+    [dir="rtl"] .article-callout p { text-align: right; }
+    [dir="rtl"] .article-h2 { text-align: right; }
+    /* Arabic font override */
+    [dir="rtl"] body,
+    [dir="rtl"] .article-p,
+    [dir="rtl"] .exp-desc,
+    [dir="rtl"] .edu-detail,
+    [dir="rtl"] .about-body p,
+    [dir="rtl"] .contact-tagline,
+    [dir="rtl"] .article-ul li,
+    [dir="rtl"] .article-ol li,
+    [dir="rtl"] .article-callout p { font-family: 'Noto Sans Arabic', 'Inter', sans-serif; }
+    [dir="rtl"] .proj-desc,
+    [dir="rtl"] .hero-id-role,
+    [dir="rtl"] .stat-label,
+    [dir="rtl"] .skill-group-name,
+    [dir="rtl"] .lang-badge { font-family: 'Noto Sans Arabic', 'Inter', sans-serif; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Bramantyo Raka</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" data-i18n="nav_about">About</a></li>
+    <li><a href="#projects" data-i18n="nav_projects">Projects</a></li>
+    <li><a href="#experience" data-i18n="nav_experience">Experience</a></li>
+    <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+  </ul>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('id')">ID</button>
+    <button class="lang-btn" onclick="setLang('ar')">AR</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span class="hero-eyebrow-text">Data Analyst &amp; Scientist · Telecom · Dashboard &amp; Automation · Android Dev</span>
+      </div>
+      <h1 class="hero-title" data-i18n="hero_title1">Bram's Data</h1>
+      <div class="hero-title-sub" data-i18n="hero_title2">Insights Hub</div>
+      <div class="hero-italic-line" data-i18n="hero_italic">
+        I like complexity. I just don't like leaving&nbsp;it&nbsp;complex.
+      </div>
+      <div class="hero-actions">
+        <a href="#projects" class="btn btn-solid" data-i18n="hero_btn1">View Projects</a>
+        <a href="#contact" class="btn" data-i18n="hero_btn2">Get In Touch</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-id-card">
+        <div class="hero-avatar-wrap">
+          <img src="assets/avatar.jpg" alt="Bramantyo Raka" />
+        </div>
+        <div>
+          <div class="hero-id-name">Bramantyo Raka</div>
+          <div class="hero-id-role">Data Analyst &amp; Scientist<br/>KSO SCI Nusa Papua · Bekasi, ID</div>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-num">1619<span class="stat-sup">+</span></div>
+          <div class="stat-label">Active Sites</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">466K<span class="stat-sup">+</span></div>
+          <div class="stat-label">Records Analyzed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">6</div>
+          <div class="stat-label">Data Projects</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Active Roles</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-bar">
+    <div class="hero-scroll"><div class="scroll-tick"></div>Scroll to explore</div>
+    <div class="hero-socials">
+      <a href="https://linkedin.com/in/bramraka666" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/Bramasta66" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:brambsns@gmail.com">Email</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-label">Who Am I</div>
+      <div class="section-title">The Person<br/><span class="section-title-thin">Behind the Data</span></div>
+    </div>
+    <div class="about-grid">
+      <div class="about-body">
+        <p class="reveal d1">
+          I'm a Computer Science graduate (<strong>Informatics</strong>) from <strong>Universitas Brawijaya</strong>,
+          with additional specialization in Data Science &amp; Machine Learning from
+          <strong>Rakamin Academy</strong>. I'm experienced in transforming complex,
+          large-scale datasets into actionable business insights.
+        </p>
+        <p class="reveal d2">
+          My work spans multiple business domains — finance, marketing, customer analytics,
+          and workforce retention. I currently hold three active roles: building the
+          <strong>SPMS monitoring dashboard</strong> for 1,619+ active telecom tower sites across Papua,
+          monitoring <strong>3G/4G network SLA performance</strong> at CV Nusa Papua, and developing
+          an <strong>internal Android app</strong> at PT. Duta Hita Jaya.
+        </p>
+        <p class="reveal d3">
+          I build lightweight desktop apps (Tauri + Rust, ~5MB vs ~150MB Electron),
+          write Python and SQL for analytics, and develop Android tools with Kotlin
+          and Jetpack Compose. My interest lies in building <strong>interpretable solutions</strong>
+          that simplify complexity and translate data into clear strategic direction.
+        </p>
+        <div class="about-langs reveal d4">
+          <span class="lang-badge">🇬🇧 English — Bilingual</span>
+          <span class="lang-badge">🇮🇩 Indonesian — Native</span>
+          <span class="lang-badge">🇸🇦 Arabic — Professional</span>
+        </div>
+      </div>
+      <div class="skills-panel">
+        <div class="skill-group reveal d1">
+          <div class="skill-group-name">Analytics &amp; BI</div>
+          <div class="pills">
+            <span class="pill">Python</span>
+            <span class="pill">SQL</span>
+            <span class="pill">BigQuery</span>
+            <span class="pill">PostgreSQL</span>
+            <span class="pill">Looker Studio</span>
+            <span class="pill">Tableau</span>
+            <span class="pill">Power BI</span>
+            <span class="pill">Pandas</span>
+            <span class="pill">openpyxl</span>
+          </div>
+        </div>
+        <div class="skill-group reveal d2">
+          <div class="skill-group-name">Machine Learning</div>
+          <div class="pills">
+            <span class="pill-o">Logistic Regression</span>
+            <span class="pill-o">Random Forest</span>
+            <span class="pill-o">XGBoost</span>
+            <span class="pill-o">K-Means</span>
+            <span class="pill-o">Gradient Boosting</span>
+            <span class="pill-o">SMOTE</span>
+            <span class="pill-o">SHAP</span>
+            <span class="pill-o">Scikit-learn</span>
+          </div>
+        </div>
+        <div class="skill-group reveal d3">
+          <div class="skill-group-name">Software Development</div>
+          <div class="pills">
+            <span class="pill">Tauri v2</span>
+            <span class="pill">Rust</span>
+            <span class="pill">Kotlin</span>
+            <span class="pill">Jetpack Compose</span>
+            <span class="pill">JavaScript</span>
+            <span class="pill">HTML / CSS</span>
+            <span class="pill">SheetJS</span>
+          </div>
+        </div>
+        <div class="skill-group reveal d4">
+          <div class="skill-group-name">Telecom &amp; Ops</div>
+          <div class="pills">
+            <span class="pill">3G / 4G KPI</span>
+            <span class="pill">SLA Monitoring</span>
+            <span class="pill">BAKTI / USO</span>
+            <span class="pill">CCTV Surveillance</span>
+            <span class="pill">Network Ops</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRIPE -->
+<div class="stripe">
+  <div class="stripe-inner reveal">
+    <div class="stripe-q">
+      <span data-i18n="stripe1">Data is the material.</span><br/><span data-i18n="stripe2"><em>Decisions</em> are the&nbsp;product.</span>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-label" data-i18n="proj_label">Portfolio</div>
+      <div class="section-title">My Projects<br/><span class="section-title-thin">Six Case Studies</span></div>
+    </div>
+  </div>
+  <div class="proj-grid reveal">
+
+    <div class="proj-card" data-project="proj1">
+      <div class="proj-img">
+        <img src="assets/proj-1.jpg" alt="Employee Retention Analysis" loading="lazy" />
+        <div class="proj-img-overlay"></div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-index">01 / 06</div>
+        <div class="proj-title">Employee Retention Analysis</div>
+        <p class="proj-desc" data-proj-desc="0">End-to-end predictive modeling on a 287-employee dataset with 25 features. Identified high-risk employees through engagement scores, tenure, and workload indicators before resignation occurs. Logistic Regression selected for interpretability over tree-based models.</p>
+        <div class="proj-foot">
+          <span class="proj-tag">Python · ML · HR Analytics</span>
+          <span class="proj-arrow">→</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card" data-project="proj2">
+      <div class="proj-img">
+        <img src="assets/proj-2.jpg" alt="Cracking the Ad Click Code" loading="lazy" />
+        <div class="proj-img-overlay"></div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-index">02 / 06</div>
+        <div class="proj-title">Cracking the Ad Click Code</div>
+        <p class="proj-desc" data-proj-desc="1">Unveiled the generational gap in adventure travel ad engagement. Challenged the "young = engaged" assumption — discovered older, lower-frequency internet users click more. Random Forest: 94%, Logistic Regression (scaled): 96% accuracy.</p>
+        <div class="proj-foot">
+          <span class="proj-tag">Classification · EDA · Marketing</span>
+          <span class="proj-arrow">→</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card" data-project="proj3">
+      <div class="proj-img">
+        <img src="assets/proj-3.png" alt="Marketplace of Flavors" loading="lazy" />
+        <div class="proj-img-overlay"></div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-index">03 / 06</div>
+        <div class="proj-title">Marketplace of Flavors</div>
+        <p class="proj-desc" data-proj-desc="2">Customer segmentation via K-Means on 2,240 profiles across 30 attributes. Identified 4 personas: Gourmet Explorers, Digital Diners, Classic Connoisseurs, and Premium Palates — each with distinct marketing strategies. Silhouette score: 0.313.</p>
+        <div class="proj-foot">
+          <span class="proj-tag">K-Means · Segmentation · Python</span>
+          <span class="proj-arrow">→</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card" data-project="proj4">
+      <div class="proj-img">
+        <img src="assets/proj-4.jpg" alt="Loan Default Storytelling" loading="lazy" />
+        <div class="proj-img-overlay"></div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-index">04 / 06</div>
+        <div class="proj-title">Loan Default Storytelling</div>
+        <p class="proj-desc" data-proj-desc="3">End-to-end EDA and modeling on 466,285 LendingClub records. Applied SMOTE for class imbalance, feature engineering, and redundancy removal. XGBoost AUC-ROC: 0.9872. Logistic Regression (95% accuracy) selected for transparency and interpretability.</p>
+        <div class="proj-foot">
+          <span class="proj-tag">XGBoost · SMOTE · FinTech</span>
+          <span class="proj-arrow">→</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card" data-project="proj5">
+      <div class="proj-img">
+        <img src="assets/proj-5.jpg" alt="Kimia Farma Business Performance" loading="lazy" />
+        <div class="proj-img-overlay"></div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-index">05 / 06</div>
+        <div class="proj-title">Kimia Farma Performance Storytelling</div>
+        <p class="proj-desc" data-proj-desc="4">SQL-based ETL pipeline integrating transaction, product, and branch data. Developed key financial metrics (net sales, gross profit %, net profit). Built Tableau dashboard for executive decision-making across Indonesia's leading pharma company (2020–2023).</p>
+        <div class="proj-foot">
+          <span class="proj-tag">SQL · Tableau · ETL · Pharma</span>
+          <span class="proj-arrow">→</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card" data-project="proj6">
+      <div class="proj-img">
+        <img src="assets/proj-6.jpg" alt="PT Sejahtera Bersama Sales Analysis" loading="lazy" />
+        <div class="proj-img-overlay"></div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-index">06 / 06</div>
+        <div class="proj-title">PT Sejahtera Bersama Sales Analysis</div>
+        <p class="proj-desc" data-proj-desc="5">Sales performance analytics for a robotics and drone marketplace. Constructed master table from four relational sources, built Looker Studio dashboards for total sales, product categories, and city-level revenue with seven strategic recommendations.</p>
+        <div class="proj-foot">
+          <span class="proj-tag">SQL · Looker Studio · E-Commerce</span>
+          <span class="proj-arrow">→</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-label" data-i18n="exp_label">Work History</div>
+      <div class="section-title">Experience<br/><span class="section-title-thin">Career Timeline</span></div>
+    </div>
+    <div class="exp-list">
+
+      <div class="exp-row reveal">
+        <div class="exp-meta">
+          <div class="exp-period">Apr 2026 — Present</div>
+          <div class="exp-badge current">Current</div>
+        </div>
+        <div>
+          <div class="exp-role">Dashboard Developer</div>
+          <div class="exp-org">KSO SCI Nusa Papua</div>
+          <p class="exp-desc">Designed and built the internal SPMS monitoring dashboard for BTS Tower projects across Papua. Built a cross-platform desktop app using Tauri (Rust) + vanilla JS — ~5MB executable vs ~150MB with Electron. Integrated real-time Excel parsing (SheetJS) to monitor 1,619+ active sites with zero backend infrastructure. App reads live from a master Excel database; no manual data entry required.</p>
+          <div class="exp-chips">
+            <span class="chip">Tauri v2</span><span class="chip">Rust</span><span class="chip">JavaScript</span><span class="chip">SheetJS</span><span class="chip">openpyxl</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-row reveal d1">
+        <div class="exp-meta">
+          <div class="exp-period">Feb 2026 — Present</div>
+          <div class="exp-badge current">Current</div>
+        </div>
+        <div>
+          <div class="exp-role">Network Operations / RAN Monitoring</div>
+          <div class="exp-org">CV Nusa Papua · Bandung</div>
+          <p class="exp-desc">Monitor, analyze, and report the performance of 3G/4G network infrastructure using SLA metrics (Availability, Accessibility, Retainability). Responsible for identifying network issues, generating performance reports, and supporting operational reliability of telecom sites. Also conducts site surveillance through CCTV and on-ground reports.</p>
+          <div class="exp-chips">
+            <span class="chip">3G/4G KPI</span><span class="chip">SLA Monitoring</span><span class="chip">RAN</span><span class="chip">CCTV</span><span class="chip">Network Ops</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-row reveal d2">
+        <div class="exp-meta">
+          <div class="exp-period">Feb 2026 — Present</div>
+          <div class="exp-badge current">Current</div>
+        </div>
+        <div>
+          <div class="exp-role">Android Developer</div>
+          <div class="exp-org">PT. Duta Hita Jaya</div>
+          <p class="exp-desc">Building an internal Android app (Kotlin + Jetpack Compose) to centralize access to company management review data. Includes hierarchical navigation, login system, Google Sheets integration, and optimized UX for multi-division access.</p>
+          <div class="exp-chips">
+            <span class="chip">Kotlin</span><span class="chip">Jetpack Compose</span><span class="chip">Google Sheets API</span><span class="chip">Android</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-row reveal d3">
+        <div class="exp-meta">
+          <div class="exp-period">Mar 2025</div>
+          <div class="exp-badge">Internship</div>
+        </div>
+        <div>
+          <div class="exp-role">Data Science Virtual Intern</div>
+          <div class="exp-org">id/x partners × Rakamin Academy · Malang</div>
+          <p class="exp-desc">End-to-end EDA and modeling on 466,285 loan records. Applied SMOTE for class imbalance, feature engineering, and redundancy removal. Developed Logistic Regression, Random Forest, and XGBoost models — achieving AUC-ROC of 0.9872. Balanced accuracy (95%) with interpretability, justifying Logistic Regression for transparent decision-making.</p>
+          <div class="exp-chips">
+            <span class="chip">Python</span><span class="chip">XGBoost</span><span class="chip">SMOTE</span><span class="chip">AUC-ROC</span><span class="chip">Feature Engineering</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-row reveal d4">
+        <div class="exp-meta">
+          <div class="exp-period">Feb — Mar 2025</div>
+          <div class="exp-badge">Internship</div>
+        </div>
+        <div>
+          <div class="exp-role">Big Data Analytics Intern</div>
+          <div class="exp-org">PT. Kimia Farma TBK × Rakamin Academy · Malang</div>
+          <p class="exp-desc">Built a SQL-based ETL pipeline integrating transaction, product, and branch data. Developed key financial metrics (net sales, gross profit %, net profit) to support pricing and revenue strategies. Built an analysis-ready dataset and Tableau dashboard for executive decision-making.</p>
+          <div class="exp-chips">
+            <span class="chip">SQL</span><span class="chip">ETL</span><span class="chip">Tableau</span><span class="chip">BigQuery</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-row reveal">
+        <div class="exp-meta">
+          <div class="exp-period">Nov — Dec 2024</div>
+          <div class="exp-badge">Internship</div>
+        </div>
+        <div>
+          <div class="exp-role">Business Intelligence Analyst Intern</div>
+          <div class="exp-org">PT Bank Muamalat Indonesia × Rakamin Academy</div>
+          <p class="exp-desc">Integrated, analyzed, and visualized historical sales data to uncover meaningful patterns and support strategic decision-making. Focused on customer behavior, product performance, and regional sales to identify opportunities for growth and retention.</p>
+          <div class="exp-chips">
+            <span class="chip">BI</span><span class="chip">Data Visualization</span><span class="chip">SQL</span><span class="chip">Reporting</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="edu-section reveal">
+      <div class="section-head" style="margin-top:0; margin-bottom:40px;">
+        <div class="section-label">Academic Background</div>
+        <div class="section-title" style="font-size:clamp(36px,5vw,64px);">Education</div>
+      </div>
+      <div class="edu-list">
+        <div class="edu-row">
+          <div class="edu-period">Sep 2018 — Jul 2023</div>
+          <div>
+            <div class="edu-degree">Bachelor's Degree — Informatics</div>
+            <div class="edu-school">Universitas Brawijaya</div>
+            <p class="edu-detail">Focus in Data Science and Analytics. Foundation across machine learning, database systems, software engineering, and statistical analysis. Runner-Up at Startup Academy Program Kreativitas Mahasiswa: Road to Rector Cup 2018.</p>
+          </div>
+        </div>
+        <div class="edu-row">
+          <div class="edu-period">Jul — Dec 2024</div>
+          <div>
+            <div class="edu-degree">Data Science &amp; Machine Learning</div>
+            <div class="edu-school">Rakamin Academy · Batch 47</div>
+            <p class="edu-detail">Intensive program covering end-to-end data science workflow: preprocessing, feature engineering, machine learning, model evaluation, and data storytelling. Certificate of Completion issued.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-bg-word">Bram</div>
+  <div class="contact-wrap">
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="contact-label" data-i18n="contact_label">Let's Work Together</div>
+        <div class="contact-title">Contact<br/>Information</div>
+        <p class="contact-tagline">Open to data science roles, BI analyst positions, freelance analytics, and collaborations. Based in Bekasi, Indonesia — available remotely.</p>
+        <a href="mailto:brambsns@gmail.com" class="contact-email-link">brambsns@gmail.com</a>
+        <div>
+          <a class="c-link-row" href="https://linkedin.com/in/bramraka666" target="_blank" rel="noopener">
+            <span class="c-link-name">LinkedIn</span>
+            <span class="c-link-handle">linkedin.com/in/bramraka666</span>
+          </a>
+          <a class="c-link-row" href="https://github.com/Bramasta66" target="_blank" rel="noopener">
+            <span class="c-link-name">GitHub</span>
+            <span class="c-link-handle">github.com/Bramasta66</span>
+          </a>
+          <a class="c-link-row" href="https://wa.me/6281333532005" target="_blank" rel="noopener">
+            <span class="c-link-name">WhatsApp</span>
+            <span class="c-link-handle">+62 813-3353-2005</span>
+          </a>
+        </div>
+      </div>
+      <div class="contact-right reveal d2">
+        <div class="contact-big-num">BRAM</div>
+        <div class="availability-badge">
+          <span class="dot-pulse"></span>
+          Open to opportunities &amp; collaborations
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-left">Bramantyo Raka</div>
+  <div class="f-right">Data Analytics · Telecom Ops · Software Dev · Bekasi, Indonesia</div>
+</footer>
+
+<!-- ARTICLE MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <div class="modal-topbar">
+      <div class="modal-topbar-label" data-i18n="modal_label">Case Study</div>
+      <button class="modal-close" id="modalClose" aria-label="Close">&#x2715;</button>
+    </div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script src="i18n.js"></script>
+<script src="articles_i18n.js"></script>
+<script>
+  // ── LANGUAGE ENGINE ──────────────────────────────────────────
+  let currentLang = 'en';
+
+  function setLang(lang) {
+    currentLang = lang;
+    const t = T[lang];
+    const isRtl = lang === 'ar';
+
+    // Direction
+    document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang === 'ar' ? 'ar' : lang === 'id' ? 'id' : 'en';
+
+    // Update nav buttons
+    document.querySelectorAll('.lang-btn').forEach(b => {
+      b.classList.toggle('active', b.textContent.trim().toLowerCase() === lang);
+    });
+
+    // Swap all data-i18n elements
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (t[key] !== undefined) el.innerHTML = t[key];
+    });
+
+    // Project card descriptions
+    if (t.proj_descriptions) {
+      document.querySelectorAll('[data-proj-desc]').forEach(el => {
+        const i = parseInt(el.dataset.projDesc);
+        if (t.proj_descriptions[i] !== undefined) el.innerHTML = t.proj_descriptions[i];
+      });
+    }
+
+    // Nav logo
+    document.querySelector('.nav-logo').textContent = t.nav_logo;
+
+    // Hero scroll hint
+    const scrollHint = document.querySelector('.hero-scroll');
+    if (scrollHint) scrollHint.querySelector('span') && (scrollHint.querySelector('span').innerHTML = t.hero_scroll);
+
+    // Hero id role
+    const role = document.querySelector('.hero-id-role');
+    if (role) role.innerHTML = t.hero_id_role;
+
+    // Stat labels
+    const statLabels = document.querySelectorAll('.stat-label');
+    const statKeys = ['stat1_label','stat2_label','stat3_label','stat4_label'];
+    statLabels.forEach((el,i) => { if (t[statKeys[i]]) el.textContent = t[statKeys[i]]; });
+
+    // About section
+    const aboutLabel = document.querySelector('#about .section-label');
+    if (aboutLabel) aboutLabel.textContent = t.about_label;
+    const aboutTitle = document.querySelector('#about .section-title');
+    if (aboutTitle) aboutTitle.innerHTML = t.about_title + '<br/><span class="section-title-thin">' + t.about_title2 + '</span>';
+    const aboutPs = document.querySelectorAll('.about-body p');
+    ['about_p1','about_p2','about_p3'].forEach((k,i) => { if (aboutPs[i] && t[k]) aboutPs[i].innerHTML = t[k]; });
+
+    // Lang badges
+    const badges = document.querySelectorAll('.lang-badge');
+    if (badges[0]) badges[0].innerHTML = t.lang_en;
+    if (badges[1]) badges[1].innerHTML = t.lang_id;
+    if (badges[2]) badges[2].innerHTML = t.lang_ar;
+
+    // Skill group names
+    const skGroups = document.querySelectorAll('.skill-group-name');
+    ['sk_analytics','sk_ml','sk_software','sk_telecom'].forEach((k,i) => {
+      if (skGroups[i] && t[k]) skGroups[i].innerHTML = t[k];
+    });
+
+    // Stripe
+    const stripeQ = document.querySelector('.stripe-q');
+    if (stripeQ && t.stripe1 && t.stripe2) {
+      stripeQ.innerHTML = t.stripe1 + '<br/>' + t.stripe2;
+    }
+
+    // Projects section titles
+    const projSection = document.querySelector('#projects .section-title');
+    if (projSection && t.proj_title) projSection.innerHTML = t.proj_title + '<br/><span class="section-title-thin">' + t.proj_title2 + '</span>';
+
+    // Experience section
+    const expLabel = document.querySelector('#experience .section-label');
+    if (expLabel) expLabel.textContent = t.exp_label;
+    const expTitle = document.querySelector('#experience .section-title');
+    if (expTitle) expTitle.innerHTML = t.exp_title + '<br/><span class="section-title-thin">' + t.exp_title2 + '</span>';
+
+    // Experience rows
+    const expRoles = document.querySelectorAll('.exp-role');
+    const expDescs = document.querySelectorAll('.exp-desc');
+    const expBadges = document.querySelectorAll('.exp-badge');
+    const expOrgs = document.querySelectorAll('.exp-org');
+    const orgTexts = ['KSO SCI Nusa Papua','CV Nusa Papua · Bandung','PT. Duta Hita Jaya',
+                      'id/x partners × Rakamin Academy · Malang','PT. Kimia Farma TBK × Rakamin Academy · Malang',
+                      'PT Bank Muamalat Indonesia × Rakamin Academy'];
+    if (t.exp_roles) {
+      t.exp_roles.forEach((role, i) => { if (expRoles[i]) expRoles[i].textContent = role; });
+    }
+    if (t.exp_descs) {
+      t.exp_descs.forEach((desc, i) => { if (expDescs[i]) expDescs[i].textContent = desc; });
+    }
+    expBadges.forEach(b => {
+      if (b.classList.contains('current') && t.exp_current) b.textContent = t.exp_current;
+      else if (!b.classList.contains('current') && t.exp_intern) b.textContent = t.exp_intern;
+    });
+
+    // Education
+    const eduLabel = document.querySelector('.edu-section .section-label');
+    if (eduLabel) eduLabel.textContent = t.edu_label;
+    const eduTitle = document.querySelector('.edu-section .section-title');
+    if (eduTitle) eduTitle.textContent = t.edu_title;
+    const eduDegrees = document.querySelectorAll('.edu-degree');
+    const eduSchools = document.querySelectorAll('.edu-school');
+    const eduDetails = document.querySelectorAll('.edu-detail');
+    if (eduDegrees[0] && t.edu_degree1) eduDegrees[0].innerHTML = t.edu_degree1;
+    if (eduDegrees[1] && t.edu_degree2) eduDegrees[1].innerHTML = t.edu_degree2;
+    if (eduSchools[0] && t.edu_school1) eduSchools[0].innerHTML = t.edu_school1;
+    if (eduSchools[1] && t.edu_school2) eduSchools[1].innerHTML = t.edu_school2;
+    if (eduDetails[0] && t.edu_detail1) eduDetails[0].innerHTML = t.edu_detail1;
+    if (eduDetails[1] && t.edu_detail2) eduDetails[1].innerHTML = t.edu_detail2;
+
+    // Contact
+    const contactLabel = document.querySelector('.contact-label');
+    if (contactLabel) contactLabel.innerHTML = t.contact_label;
+    const contactTitle = document.querySelector('.contact-title');
+    if (contactTitle) contactTitle.innerHTML = t.contact_title;
+    const contactTagline = document.querySelector('.contact-tagline');
+    if (contactTagline) contactTagline.innerHTML = t.contact_tagline;
+    const available = document.querySelector('.availability-badge');
+    if (available && t.contact_available) {
+      available.innerHTML = '<span class="dot-pulse"></span>' + t.contact_available;
+    }
+
+    // Footer
+    const footerRight = document.querySelector('.f-right');
+    if (footerRight) footerRight.innerHTML = t.footer_right;
+
+    // Modal label
+    const modalLabel = document.querySelector('.modal-topbar-label');
+    if (modalLabel) modalLabel.innerHTML = t.modal_label;
+  }
+
+  // ── ARTICLE LANGUAGE RENDERING ───────────────────────────────
+  function getArticleBody(projId, lang) {
+    const proj = ARTICLES[projId];
+    const trans = ARTICLE_TRANSLATIONS[projId];
+    if (!proj) return [];
+
+    if (lang === 'en') return proj.body;
+    if (trans && trans['body_' + lang]) return trans['body_' + lang];
+    return proj.body; // fallback to English
+  }
+
+  function getArticleTitle(projId, lang) {
+    const trans = ARTICLE_TRANSLATIONS[projId];
+    if (trans && trans.title && trans.title[lang]) return trans.title[lang];
+    return ARTICLES[projId]?.title || '';
+  }
+
+  function getArticleSubtitle(projId, lang) {
+    const trans = ARTICLE_TRANSLATIONS[projId];
+    if (trans && trans.subtitle && trans.subtitle[lang]) return trans.subtitle[lang];
+    return ARTICLES[projId]?.subtitle || '';
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  window.addEventListener('load', () => {
+    document.getElementById('heroBg').classList.add('loaded');
+    // Fallback: reveal anything already in viewport on load
+    setTimeout(() => {
+      document.querySelectorAll('.reveal:not(.in)').forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight) el.classList.add('in');
+      });
+    }, 120);
+  });
+
+  const ARTICLES = {
+    proj1: {
+      title: "Employee Retention Analysis",
+      subtitle: "Predicting Who Leaves Before They Do",
+      tags: "Python &middot; Machine Learning &middot; HR Analytics &middot; Rakamin Academy",
+      date: "2025",
+      heroImg: "assets/proj-1.jpg",
+      slides: ["assets/slides/proj1/slide_01.jpg","assets/slides/proj1/slide_02.jpg","assets/slides/proj1/slide_03.jpg","assets/slides/proj1/slide_04.jpg","assets/slides/proj1/slide_05.jpg","assets/slides/proj1/slide_06.jpg","assets/slides/proj1/slide_07.jpg","assets/slides/proj1/slide_08.jpg","assets/slides/proj1/slide_09.jpg","assets/slides/proj1/slide_10.jpg","assets/slides/proj1/slide_11.jpg","assets/slides/proj1/slide_12.jpg","assets/slides/proj1/slide_13.jpg","assets/slides/proj1/slide_14.jpg","assets/slides/proj1/slide_15.jpg","assets/slides/proj1/slide_16.jpg","assets/slides/proj1/slide_17.jpg","assets/slides/proj1/slide_18.jpg"],
+      slideCaptions: ["Project roadmap — 5 stages","Major drivers of turnover","Applying data science — 8 feature categories","Dataset overview — 287 entries, 25 columns","Handling null values — imputation strategy","Encoding categorical variables","Employee workforce analysis — net change formula","Annual workforce waterfall chart","Resigned vs active subsets analysis","Retention by job role percentage","ML Engineer resignation reasons breakdown","Overall resignation reasons — Lain-Lain dominates","Resignation by age group — 40-50 most vulnerable","How long before resigning? ~13.7 years","Model performance table — 6 models","Confusion matrices comparison","Why Logistic Regression wins","Actionables — 6 HR strategies"],
+      body: [
+        {t:"callout",x:"Every resignation is a decision made long before the resignation letter lands on a desk. The data knew first."},
+        {t:"h2",x:"The Problem with Waiting"},
+        {t:"p",x:"Organizations consistently react to resignations <em>after</em> they happen. Exit interviews are held. Knowledge transfer is rushed. Recruitment cycles begin. The cost of a single departure — in time, money, and team morale — is routinely underestimated. High attrition doesn't just hurt productivity; it signals something systemic that numbers can diagnose before managers even notice."},
+        {t:"p",x:"This project starts with a simple conviction: if we can identify the signals that precede a resignation, we can intervene before it's too late. That's the promise of predictive HR analytics."},
+        {t:"slide",i:0},
+        {t:"h2",x:"What Actually Drives People Out"},
+        {t:"ul",x:["<strong>Workload pressure</strong> — excessive hours, insufficient recovery, burnout that accumulates quietly","<strong>Culture deterioration</strong> — low peer collaboration scores, weak office satisfaction, toxic dynamics that rarely get named","<strong>Compensation gaps</strong> — salary that stopped growing while the market didn't","<strong>Career stagnation</strong> — no promotions, no recognition, no visible path forward"]},
+        {t:"slide",i:1},
+        {t:"slide",i:2},
+        {t:"h2",x:"Preparing the Data"},
+        {t:"p",x:"A dataset of 287 employees with 25 features doesn't arrive clean. A target variable was created: resigned = 1, active = 0. Columns with no predictive value were dropped. Null values imputed: median for numerical columns, mode for categoricals. Categorical variables encoded. Feature scaling applied."},
+        {t:"slide",i:3},
+        {t:"slide",i:4},
+        {t:"slide",i:5},
+        {t:"h2",x:"What the Workforce Actually Looked Like"},
+        {t:"p",x:"A workforce waterfall analysis revealed a company in three distinct phases:"},
+        {t:"slide",i:6},
+        {t:"ul",x:["<strong>2006–2014:</strong> Strong, consistent growth. The company was expanding, hiring was healthy, momentum was real.","<strong>2015–2016:</strong> Slowdown. Hiring decisions became more cautious.","<strong>2017–2018:</strong> Decline. Net workforce shrank. A notable spike in 2012 — likely restructuring."]},
+        {t:"slide",i:7},
+        {t:"h2",x:"Zooming Into Who Left and Why"},
+        {t:"p",x:"Two subsets were created: employees who resigned, and those who stayed. The contrast between them is where the insights live."},
+        {t:"slide",i:8},
+        {t:"p",x:"Job role retention varied dramatically. Software Architects, Scrum Masters, and UX Researchers showed the highest retention. DevOps Engineers and ML Engineers showed the lowest — external market pressure is relentless in both roles."},
+        {t:"slide",i:9},
+        {t:"callout",x:"The most cited resignation reason? 'Lain-lain' — Indonesian for 'other'. When employees won't name what drove them out, that's a signal louder than any category."},
+        {t:"slide",i:10},
+        {t:"slide",i:11},
+        {t:"p",x:"The <strong>40–50 age group</strong> had the highest resignation count — 31 individuals. Mid-career professionals at peak earning potential choosing to leave. That doesn't happen over small grievances."},
+        {t:"slide",i:12},
+        {t:"p",x:"Most resignations happened around <strong>5,000 days of tenure</strong> — approximately 13.7 years. Long-tenured, high-performing employees walking out. This isn't an onboarding problem. It's a retention problem that compounds over a decade."},
+        {t:"slide",i:13},
+        {t:"h2",x:"The Models"},
+        {t:"p",x:"Six models were evaluated across accuracy, AUC, recall, precision, F1, Kappa, and MCC. Tree-based models achieved near-perfect training accuracy — which is exactly the problem."},
+        {t:"slide",i:14},
+        {t:"slide",i:15},
+        {t:"callout",x:"A model that scores 99% on training data and fails on the next hire is not a good model. Logistic Regression was selected for its transparency, generalizability, and interpretability under pressure."},
+        {t:"slide",i:16},
+        {t:"h2",x:"What Should Actually Change"},
+        {t:"ol",x:["<strong>Engagement programs</strong> — regular feedback loops, not annual surveys nobody reads","<strong>Salary benchmarking</strong> — for high-risk roles specifically. ML Engineers don't stay for culture alone.","<strong>Flexible work</strong> — remote options, hybrid schedules. The market has already moved here.","<strong>Workload monitoring</strong> — flag chronic overtime before burnout shows up in exit data","<strong>Career paths</strong> — structured, visible, and real. Not aspirational org chart slides.","<strong>Continuous model deployment</strong> — retrain on new data, catch the next wave before it crests."]},
+        {t:"slide",i:17},
+        {t:"callout",x:"The best retention strategy isn't a retention strategy at all. It's listening to the data early enough that you never need one."}
+      ]
+    },
+
+    proj2: {
+      title: "Cracking the Ad Click Code",
+      subtitle: "Unveiling the Generational Gap in Adventure Travel Engagement",
+      tags: "Classification &middot; EDA &middot; Random Forest &middot; Marketing Analytics",
+      date: "2025",
+      heroImg: "assets/proj-2.jpg",
+      slides: ["assets/slides/proj2/slide_01.jpg","assets/slides/proj2/slide_02.jpg","assets/slides/proj2/slide_03.jpg","assets/slides/proj2/slide_04.jpg","assets/slides/proj2/slide_05.jpg","assets/slides/proj2/slide_06.jpg","assets/slides/proj2/slide_07.jpg","assets/slides/proj2/slide_08.jpg","assets/slides/proj2/slide_09.jpg","assets/slides/proj2/slide_10.jpg","assets/slides/proj2/slide_11.jpg","assets/slides/proj2/slide_12.jpg","assets/slides/proj2/slide_13.jpg","assets/slides/proj2/slide_14.jpg","assets/slides/proj2/slide_15.jpg","assets/slides/proj2/slide_16.jpg","assets/slides/proj2/slide_17.jpg"],
+      slideCaptions: ["Cover — Decoding the Explorer","A story: the campaign and its surprise","Mapping the traveler's journey","The Experienced Adventurers — older users click more","Online behavior — lower internet usage = more clicks","Site engagement — clickers spend less time on site","Boxplots — visualizing the Wanderlust persona","Correlation matrix — navigating the relationships","Pair plot — the global view confirmed","Time feature extraction from timestamp","Model experimentation results (non-scaled)","Scaled results — LR jumps to 96%","Feature importance — Random Forest top contributors","Feature importance — Logistic Regression coefficients","Why Random Forest? Complex non-linear relationships","Recommendations — 6 targeting strategies","Business simulation — AI-driven vs baseline"],
+      body: [
+        {t:"slide",i:0},
+        {t:"h2",x:"A Story That Started With a Wrong Assumption"},
+        {t:"p",x:"At Wanderlust Expeditions, a campaign launched with a confident hypothesis: target Millennials and Gen Z. Young. Digital. Always online. Surely they'd be the ones clicking on adventure travel ads."},
+        {t:"p",x:"The results came back. And the hypothesis was wrong."},
+        {t:"callout",x:"Older travelers were clicking on adventure travel ads more than younger ones. The campaign had been aimed at entirely the wrong audience."},
+        {t:"slide",i:1},
+        {t:"h2",x:"Mapping the Traveler's Journey"},
+        {t:"p",x:"To understand who was actually engaging, data was collected across five dimensions: traveler age, daily internet usage, daily time spent on site, income, and ad click behavior. The dataset became a map of digital behavior — and what it revealed challenged everything."},
+        {t:"slide",i:2},
+        {t:"h2",x:"Finding 1 — The Experienced Adventurers"},
+        {t:"p",x:"Older users clicked more. Not slightly more — significantly more. Experienced travelers, with more disposable income and more time to plan, are the ones actually acting on what they see."},
+        {t:"slide",i:3},
+        {t:"h2",x:"Finding 2 — The Digital Trailblazers"},
+        {t:"p",x:"Here's where it gets counterintuitive: users with <em>lower</em> daily internet usage clicked more. Focused users — those who come online with intention rather than habit — are more receptive to ads when they appear."},
+        {t:"slide",i:4},
+        {t:"h2",x:"Finding 3 — The Quick Discovery"},
+        {t:"p",x:"Users who clicked on ads tended to spend <em>less</em> time on the website. Clicks are driven by immediate curiosity, not deep browsing. Landing pages need to deliver value in seconds, not paragraphs."},
+        {t:"slide",i:5},
+        {t:"p",x:"The boxplots confirmed what the individual findings suggested. A distinct Wanderlust persona began to emerge from the noise."},
+        {t:"slide",i:6},
+        {t:"callout",x:"The Wanderlust clicker is older, uses the internet less, spends less time on site, and earns more. They're not who the campaign was targeting — but they're who it was reaching."},
+        {t:"h2",x:"Relationships in the Data"},
+        {t:"p",x:"The correlation matrix and pair plots locked in the story. Moderate negative correlation between age and internet usage. Strong positive correlation between internet usage and time on site."},
+        {t:"slide",i:7},
+        {t:"slide",i:8},
+        {t:"h2",x:"Feature Engineering"},
+        {t:"p",x:"A timestamp column was decomposed into year, month, week, and day to surface temporal patterns. Seasonality matters in travel — when people click is as important as why."},
+        {t:"slide",i:9},
+        {t:"h2",x:"The Models"},
+        {t:"table",h:["Model","Without Scaling","With Scaling"],r:[["Random Forest","94%","94%"],["Logistic Regression","90%","96%"],["SVM","69%","95%"]]},
+        {t:"slide",i:10},
+        {t:"slide",i:11},
+        {t:"h2",x:"What Drives the Click"},
+        {t:"ol",x:["<strong>Daily Internet Usage</strong> — less usage = more likely to click","<strong>Daily Time Spent on Site</strong> — shorter visits correlate with clicking","<strong>Age</strong> — older users are more likely to engage","<strong>Area Income</strong> — higher income correlates with ad engagement on premium content"]},
+        {t:"slide",i:12},
+        {t:"slide",i:13},
+        {t:"p",x:"Random Forest was selected as the final model for its ability to capture complex non-linear interactions between age, internet behavior, and income."},
+        {t:"slide",i:14},
+        {t:"h2",x:"What Wanderlust Should Do Differently"},
+        {t:"ol",x:["Refine placements to appear on platforms frequented by older, lower-frequency users","Target lower daily internet usage segments in ad algorithms explicitly","Lead with short, high-impact formats — video and interactive creatives that deliver value fast","Optimize landing pages for immediate clarity, not deep exploration","Apply age-based and income-based segmentation for copy personalization","Use feature importance rankings to continuously retune targeting parameters"]},
+        {t:"slide",i:15},
+        {t:"h2",x:"The Business Case"},
+        {t:"slide",i:16},
+        {t:"table",h:["Metric","Traditional","AI-Driven"],r:[["Conversion Rate","2%","5%"],["Revenue","$10,000","$25,000"],["Profit","$5,000","$20,000"]]},
+        {t:"callout",x:"Same budget. Same audience size. Four times the profit. The only variable that changed was knowing who to target — and the data already had the answer."}
+      ]
+    },
+
+    proj3: {
+      title: "Marketplace of Flavors",
+      subtitle: "Four Customers Walk Into a Market",
+      tags: "K-Means &middot; Clustering &middot; Customer Segmentation &middot; EDA",
+      date: "April 2025",
+      heroImg: "assets/proj-3.png",
+      slides: ["assets/slides/proj3/slide_01.jpg","assets/slides/proj3/slide_02.jpg","assets/slides/proj3/slide_03.jpg","assets/slides/proj3/slide_04.jpg","assets/slides/proj3/slide_05.jpg","assets/slides/proj3/slide_06.jpg","assets/slides/proj3/slide_07.jpg","assets/slides/proj3/slide_08.jpg","assets/slides/proj3/slide_09.jpg","assets/slides/proj3/slide_10.jpg","assets/slides/proj3/slide_11.jpg","assets/slides/proj3/slide_12.jpg","assets/slides/proj3/slide_13.jpg","assets/slides/proj3/slide_14.jpg","assets/slides/proj3/slide_15.jpg","assets/slides/proj3/slide_16.jpg","assets/slides/proj3/slide_17.jpg"],
+      slideCaptions: ["Table of contents — 6 sections","Dataset: 2,240 profiles, 30 attributes","Customer profile details and categories","Feature engineering — 5 signals","Age distribution — peak at late 40s–50s","Spending vs income scatter","Conversion rate vs age — volatile youngsters","Marital status vs total spending","Education level vs transaction count","Customer age deep dive — 4 behavioral zones","Pre-processing context — raw data is a mess","Cleaning steps 1 — imputation and dropping","Cleaning steps 2 — education and marital encoding","Elbow method — optimal K=4","Cluster visualization — 4 personas","Tailoring the experience per segment","Silhouette score 0.313 and cluster summary"],
+      body: [
+        {t:"callout",x:"A market that treats every customer the same isn't a market — it's a broadcast. Segmentation is how you start actually talking to people."},
+        {t:"h2",x:"The Setup"},
+        {t:"p",x:"Marketplace of Flavors sells high-quality food and beverage products: fruits, meat, fish, sweets, beverages. The business question was pointed: <em>who are our customers, really?</em> Not just demographics, but behavior, values, and what would make them return. The dataset: 2,240 customer profiles, 30 attributes each. No duplicates. Clean foundation, messy surface."},
+        {t:"slide",i:0},
+        {t:"slide",i:1},
+        {t:"slide",i:2},
+        {t:"h2",x:"Engineering the Right Signals"},
+        {t:"ul",x:["<strong>Customer Age</strong> — how age shapes purchasing patterns","<strong>Total Spending</strong> — single number for customer value across all categories","<strong>Total Transactions</strong> — engagement depth, not just volume","<strong>Number of Children</strong> — household structure as purchase behavior proxy","<strong>Conversion Rate</strong> — web visits that actually converted to purchases"]},
+        {t:"slide",i:3},
+        {t:"h2",x:"What the Data Showed"},
+        {t:"p",x:"Customer ages cluster between 40 and 60. This is a mature base — stable income, predictable patterns, lower price sensitivity. The business isn't selling to trend-chasers."},
+        {t:"slide",i:4},
+        {t:"p",x:"Spending correlates with income — but imperfectly. High-income customers don't always spend more. Behavior diverges from capacity. That divergence is exactly where segmentation adds value."},
+        {t:"slide",i:5},
+        {t:"p",x:"Conversion rates are low across all age groups, with younger segments showing higher volatility. Low conversion isn't necessarily a product problem — it's often a targeting and messaging problem."},
+        {t:"slide",i:6},
+        {t:"p",x:"Widowed customers spend the most on average. Higher education correlates with more transactions. Marital status and education level both shape behavior in measurable ways."},
+        {t:"slide",i:7},
+        {t:"slide",i:8},
+        {t:"callout",x:"The age deep dive revealed four behavioral zones: volatile youngsters, low-but-consistent middles, a high-conversion spike, and an anomalous tail. Each zone needs a different conversation."},
+        {t:"slide",i:9},
+        {t:"h2",x:"Cleaning the Mess"},
+        {t:"p",x:"Missing income values imputed with median. Rows with null conversion rates removed. Irrelevant identifier columns dropped. Education ordinal-encoded. Marital status one-hot encoded. The data was ready."},
+        {t:"slide",i:10},
+        {t:"slide",i:11},
+        {t:"h2",x:"Pick a Number"},
+        {t:"p",x:"The Elbow Method identified <strong>K=4</strong> as the optimal cluster count. After K=4 the curve flattens — adding clusters yields diminishing interpretive returns."},
+        {t:"slide",i:12},
+        {t:"h2",x:"Four Customers Walk Into a Market"},
+        {t:"slide",i:13},
+        {t:"table",h:["Persona","Profile","Strategy"],r:[["Gourmet Explorers","Younger, high spenders","Loyalty programs, cross-selling, exclusivity"],["Digital Diners","Younger, low spenders, high web activity","Conversion campaigns, first-purchase incentives"],["Classic Connoisseurs","Older, moderate spenders, steady","Retention, relationship-based touchpoints"],["Premium Palates","Older, high spenders, low web interaction","Premium service, VIP programs, offline-first"]]},
+        {t:"slide",i:14},
+        {t:"h2",x:"Tailoring the Experience"},
+        {t:"p",x:"Gourmet Explorers want to feel like insiders. Digital Diners need a reason to actually buy. Classic Connoisseurs want to be remembered, not marketed to. Premium Palates want excellence — they'll pay for it, but they won't chase it."},
+        {t:"slide",i:15},
+        {t:"h2",x:"The Numbers"},
+        {t:"slide",i:16},
+        {t:"table",h:["Cluster","Avg Age","Total Spending","Web Visits/Month"],r:[["Gourmet Explorers","45.25","1,280,267","3.27"],["Digital Diners","46.02","184,636","6.89"],["Classic Connoisseurs","64.93","351,909","5.84"],["Premium Palates","66.86","1,299,852","3.02"]]},
+        {t:"p",x:"Silhouette Score: <strong>0.313</strong>. Moderate separation — acceptable and expected for behavioral segmentation where real human groups naturally overlap."},
+        {t:"callout",x:"Four clusters. Four conversations. One market that finally knows who it's talking to."}
+      ]
+    },
+
+    proj4: {
+      title: "Loan Default Storytelling",
+      subtitle: "Make Numbers Tell",
+      tags: "XGBoost &middot; SMOTE &middot; LendingClub &middot; FinTech Risk",
+      date: "March 2025",
+      heroImg: "assets/proj-4.jpg",
+      slides: ["assets/slides/proj4/slide_01.jpg","assets/slides/proj4/slide_02.jpg","assets/slides/proj4/slide_03.jpg","assets/slides/proj4/slide_04.jpg","assets/slides/proj4/slide_05.jpg","assets/slides/proj4/slide_06.jpg","assets/slides/proj4/slide_07.jpg","assets/slides/proj4/slide_08.jpg","assets/slides/proj4/slide_09.jpg","assets/slides/proj4/slide_10.jpg","assets/slides/proj4/slide_11.jpg","assets/slides/proj4/slide_12.jpg","assets/slides/proj4/slide_13.jpg","assets/slides/proj4/slide_14.jpg","assets/slides/proj4/slide_15.jpg","assets/slides/proj4/slide_16.jpg","assets/slides/proj4/slide_17.jpg","assets/slides/proj4/slide_18.jpg"],
+      slideCaptions: ["Industry statistics: 3.7% avg charge-off, up to $10B annually","Loan defaults defined","About LendingClub — peer-to-peer lending pioneer","Project highlights — the five-act workflow","The main characters — four key variables","Loan amount distribution by home ownership","Interest rate distribution — skewed to the higher end","Loan status distribution — fully paid vs charged off","Loan purpose vs default — begging a question","Economic conditions as a backdrop","Pre-processing — missing values, encoding, datetime","Model prep — feature engineering, scaling, SMOTE","The storytellers — three models, three personalities","Evaluation metrics framework","Full results table — accuracy, AUC-ROC, F1 across all models","Logistic Regression: The Chosen One","Feature importance — the influential characters","Conclusion — the final verdict"],
+      body: [
+        {t:"callout",x:"3.7% average charge-off rate. Up to $10 billion written off annually. Behind every number is a borrower who couldn\'t hold on."},
+        {t:"slide",i:0},
+        {t:"h2",x:"The Stage"},
+        {t:"p",x:"Lending Club, one of the pioneers of online peer-to-peer lending, has facilitated billions in loans. It bridged opportunity between everyday investors and borrowers who needed a chance. But viewed as a pioneer in the fintech industry and one of the largest such firms, LendingClub experienced turbulence in early 2016 — difficulties attracting investors, trust eroding, and defaults climbing."},
+        {t:"p",x:"Understanding the factors that contribute to loan defaults on such platforms is vital for investors, borrowers, and the platform\'s sustainability. That\'s the question this project answers."},
+        {t:"slide",i:1},
+        {t:"slide",i:2},
+        {t:"h2",x:"Act I &mdash; The Main Characters"},
+        {t:"p",x:"Every great story has characters. In this one, the cast is financial. Four variables that hold the most predictive weight about whether a loan ends in a handshake or a write-off."},
+        {t:"ul",x:["Loan Amount (The Principal) &mdash; how much was borrowed","Interest Rate (The Cost of Borrowing) &mdash; the price of risk","Borrower\'s Income (Their Ability) &mdash; can they actually pay it back?","Loan Purpose (The Reason) &mdash; why they needed the money at all"]},
+        {t:"slide",i:3},
+        {t:"slide",i:4},
+        {t:"h2",x:"Act II &mdash; Reading the Data"},
+        {t:"p",x:"The dataset contains 466,285 loan records. Before any model sees a single row, the data needs to speak. Here\'s what it said."},
+        {t:"p",x:"<strong>On loan amounts:</strong> Most loans cluster at moderate funding levels. The tail extends for edge cases &mdash; the outliers, the ambitious, the risky. Mortgage holders borrow more. The pattern holds."},
+        {t:"slide",i:5},
+        {t:"p",x:"<strong>On interest rates:</strong> Slightly skewed toward the higher end, mean sitting at 13.83%. This isn\'t random &mdash; it\'s risk-based pricing in action. Higher risk borrowers pay more. The market is speaking, and the data confirms it: risk equals return."},
+        {t:"slide",i:6},
+        {t:"p",x:"<strong>On loan status:</strong> The most important distribution. Fully paid is our happy ending. Charged off is not. 184,739 fully paid. 42,475 charged off. The imbalance is real &mdash; and it becomes a problem we\'ll have to solve before modeling."},
+        {t:"slide",i:7},
+        {t:"callout",x:"Are loans taken for \'small businesses\' more likely to default than those for \'debt consolidation\'? The purpose distribution begs the question &mdash; and the data quietly answers yes."},
+        {t:"slide",i:8},
+        {t:"p",x:"<strong>On economic context:</strong> The 2008 financial crisis is a reminder that no model lives in a vacuum. Default rates surged across the board not because borrowers changed &mdash; but because the world did. Macro conditions matter. Issue year becomes a feature, not just a timestamp."},
+        {t:"slide",i:9},
+        {t:"h2",x:"Act III &mdash; Cleaning the Narrative"},
+        {t:"p",x:"Raw data is messy. It has missing values, inconsistent formats, and categorical noise. Before the models could speak, the data needed to be cleaned."},
+        {t:"ul",x:["Dropped features with more than 50% missing values","Imputed missing numerical values with median, categorical with mode","Created binary target from loan_status: 1 = default, 0 = paid","One-hot encoded all categorical variables","Converted date columns to proper datetime format"]},
+        {t:"slide",i:10},
+        {t:"p",x:"Then came model preparation. New features were engineered: <em>issue_year</em>, <em>issue_month</em>, <em>credit_history_length</em>. Redundant features removed. Numerical features scaled with StandardScaler. And the most important intervention &mdash; SMOTE applied to oversample the minority class (defaults), giving the model a fair chance to learn from both sides of the story."},
+        {t:"slide",i:11},
+        {t:"h2",x:"Act IV &mdash; The Storytellers"},
+        {t:"p",x:"Three models. Three personalities. All trained on the same data, but each telling the story differently."},
+        {t:"ul",x:["<strong>Logistic Regression</strong> &mdash; the transparent narrator. It explains its decisions. Every coefficient is a sentence in plain language.","<strong>Random Forest</strong> &mdash; the analytical thinker. An ensemble of decisions, robust and steady.","<strong>XGBoost</strong> &mdash; the decisive performer. Gradient-boosted and relentless. Highest accuracy, lowest mercy for nuance."]},
+        {t:"slide",i:12},
+        {t:"p",x:"Each model was evaluated on four fronts: classification reports, AUC-ROC curves, confusion matrices, and cross-validation. Not just accuracy &mdash; but trust."},
+        {t:"slide",i:13},
+        {t:"h2",x:"Act V &mdash; The Results"},
+        {t:"slide",i:14},
+        {t:"table",h:["Metric","Logistic Regression","Random Forest","XGBoost"],r:[["Accuracy","0.95","0.97","0.98"],["AUC-ROC","0.9398","0.9569","0.9872"],["Mean CV AUC-ROC","0.9615","0.9988","0.9985"],["F1-score (Default)","0.77","0.84","0.90"],["Weighted Avg F1","0.95","0.97","0.98"]]},
+        {t:"p",x:"XGBoost wins on paper. But winning on paper isn\'t the same as winning in practice. Random Forest and XGBoost both showed signs of overfitting &mdash; near-perfect cross-validation scores that don\'t reflect real-world conditions. A model that memorizes isn\'t a model that understands."},
+        {t:"slide",i:15},
+        {t:"callout",x:"Logistic Regression was chosen. Not because it scored highest &mdash; but because it could explain itself. In financial risk, interpretability isn\'t a nice-to-have. It\'s the product."},
+        {t:"h2",x:"The Influential Characters"},
+        {t:"p",x:"The feature importance analysis revealed the true drivers of default &mdash; and confirmed what the EDA hinted at all along."},
+        {t:"ol",x:["<strong>num_loan_amnt</strong> &mdash; the single most influential variable. The more you borrow, the higher the risk.","<strong>num_total_pymnt</strong> &mdash; total payment made. High payment = low default risk. Simple, powerful.","<strong>num_out_prncp</strong> &mdash; outstanding principal. What\'s left unpaid tells a story.","<strong>num_int_rate</strong> &mdash; interest rate. Risk priced in, risk realized.","<strong>num_issue_year</strong> &mdash; when the loan was issued. Economic context encoded as time.","<strong>cat_annual_inc_binned</strong> &mdash; income level. Ability to repay, numerically confirmed."]},
+        {t:"slide",i:16},
+        {t:"h2",x:"The Verdict"},
+        {t:"slide",i:17},
+        {t:"p",x:"Loan defaults are not random. They are the predictable outcome of a complex interplay: how much was borrowed, at what rate, by someone with what income, for what purpose, during what economic climate."},
+        {t:"p",x:"Logistic Regression captures these relationships cleanly and communicates them clearly. Tree-based models demonstrate higher predictive accuracy but come with overfitting risk that makes them harder to trust in production."},
+        {t:"callout",x:"The best model isn\'t always the most accurate one. It\'s the one you can defend in a boardroom, explain to a regulator, and trust when it says no."}
+      ]
+    },
+    proj5: {
+      title: "Kimia Farma Performance Storytelling",
+      subtitle: "Reading a 206-Year-Old Company Through Data",
+      tags: "BigQuery &middot; SQL &middot; Looker Studio &middot; Pharma BI",
+      date: "Feb–Mar 2025",
+      heroImg: "assets/proj-5.jpg",
+      slides: ["assets/slides/proj5/slide_01.jpg","assets/slides/proj5/slide_02.jpg","assets/slides/proj5/slide_03.jpg","assets/slides/proj5/slide_04.jpg","assets/slides/proj5/slide_05.jpg","assets/slides/proj5/slide_06.jpg","assets/slides/proj5/slide_07.jpg","assets/slides/proj5/slide_08.jpg","assets/slides/proj5/slide_09.jpg","assets/slides/proj5/slide_10.jpg","assets/slides/proj5/slide_11.jpg","assets/slides/proj5/slide_12.jpg","assets/slides/proj5/slide_13.jpg","assets/slides/proj5/slide_14.jpg"],
+      slideCaptions: ["About Kimia Farma — Indonesia's largest pharma company since 1817","Project portfolio — 4 key business questions","Step 1: Importing datasets to BigQuery","Step 2: Analysis Table — SQL CTE joins and calculations","Step 3: Clean Analysis Table — standardization and validation","Dashboard — monthly revenue, branches overview, geo-map","Cracking the February dip — revenue trend analysis","The power of location — top provinces by transaction volume","Branch-level insights — geo-map and branches overview","Understanding the relationship — branch rate vs transaction rate","Next steps — pricing strategy, regional preferences, marketing","Appendix — BigQuery exploratory SQL queries","Appendix — Create Analysis Table SQL (full CTE)","Appendix — Clean Analysis Table SQL"],
+      body: [
+        {t:"callout",x:"Kimia Farma has been operating since 1817. Over two centuries of healthcare. And yet, February still catches it every year."},
+        {t:"h2",x:"The Company"},
+        {t:"p",x:"Originally established as NV Chemicalien Handle Rathkamp & Co. in 1817 during the Dutch colonial era, Kimia Farma is now one of Indonesia's largest and oldest pharmaceutical companies. Headquartered in Jakarta, it operates under the state-owned Bio Farma group and runs thousands of pharmacy outlets, clinics, and diagnostic labs nationwide. It manufactures generic and branded medicines, distributes healthcare products, and has been expanding into e-commerce and telemedicine."},
+        {t:"p",x:"A company this large, this old, and this embedded in the national healthcare system generates enormous amounts of transactional data. The question this project asks: <em>what does that data actually say about performance?</em>"},
+        {t:"slide",i:0},
+        {t:"h2",x:"Four Questions the Business Needed Answered"},
+        {t:"slide",i:1},
+        {t:"ul",x:["<strong>Why does revenue consistently dip in February?</strong> Year after year, the same month, the same drop.","<strong>Which provinces and branches contribute most to transactions?</strong> Not all locations are equal — but how unequal?","<strong>How do transaction rates correlate with revenue trends?</strong> Is volume driving revenue, or is something else at play?","<strong>What role does customer behavior play in shaping sales performance?</strong> Ratings, spending patterns, visit frequency."]},
+        {t:"h2",x:"Building the Data Infrastructure"},
+        {t:"p",x:"Before any question could be answered, the data needed to be built into something queryable. The source data lived in four CSV files. The destination was BigQuery. Here's how the pipeline came together."},
+        {t:"h2",x:"Step 1 — Into BigQuery"},
+        {t:"p",x:"A new BigQuery project was created: <code>rakaminkimiafarma</code>, with a dataset named <code>kimia_farma</code>. Each CSV was imported one by one. Initial exploration confirmed the table structures and identified what would need cleaning."},
+        {t:"slide",i:2},
+        {t:"h2",x:"Step 2 — Building the Analysis Table"},
+        {t:"p",x:"A SQL CTE named <code>transaction_data</code> was constructed to join all relevant tables and derive the key financial metrics. This is where the raw data became analytical:"},
+        {t:"ul",x:["<strong>Joined <code>kf_final_transaction</code></strong> with <code>kf_product</code> for product name and price","<strong>Joined <code>kf_kantor_cabang</code></strong> for branch name, city, province, and branch rating","<strong>Calculated net sales</strong> — price after discount applied","<strong>Assigned gross profit percentage</strong> — tiered by price range (10%–30%)","<strong>Computed net profit</strong> — ensuring non-negative values at each price tier"]},
+        {t:"slide",i:3},
+        {t:"slide",i:12},
+        {t:"slide",i:13},
+        {t:"h2",x:"Step 3 — Cleaning the Analysis Table"},
+        {t:"p",x:"The joined table still needed standardization before it could be trusted:"},
+        {t:"ul",x:["Removed duplicate transaction IDs","Handled missing branch names with COALESCE to 'Unknown'","Replaced NULL ratings with 0","Handled missing customer and product names","Ensured price and discount were cast to FLOAT64","Clamped discounts to the valid 0–100% range","Validated that net profit was non-negative across all rows","Constrained ratings to the 0–5 scale"]},
+        {t:"slide",i:4},
+        {t:"slide",i:11},
+        {t:"h2",x:"The Dashboard"},
+        {t:"p",x:"With a clean, analysis-ready table in BigQuery, a Looker Studio dashboard was built. Three views: monthly revenue trends, branch performance overview, and a geographic profit map of Indonesia."},
+        {t:"slide",i:5},
+        {t:"callout",x:"Rp 86.470M in 2021. Down 0.49% from the prior year. February 2021: -3.38% month-over-month. The pattern is consistent. The question is why."},
+        {t:"h2",x:"Chapter 1 — Cracking the February Dip"},
+        {t:"p",x:"February revenue dips consistently year over year. This isn't noise — it's a structural pattern that repeats across every year in the dataset. A closer look at transactions confirms the dip isn't a pricing issue or a product issue. It's a volume issue. Fewer customers are purchasing in February."},
+        {t:"p",x:"The most likely explanation: post-holiday spending slowdowns. New Year and Chinese New Year both fall in the Q1 window. After holiday spending surges, consumers pull back. Healthcare purchases, unless urgent, get deferred."},
+        {t:"slide",i:6},
+        {t:"callout",x:"The fix isn't complicated. Targeted promotions and loyalty rewards in early Q1 can counteract the dip before it happens. Waiting until February to react is already too late."},
+        {t:"h2",x:"Chapter 2 — The Power of Location"},
+        {t:"p",x:"Kimia Farma operates across more than 20 provinces. But the distribution of transactions is far from uniform."},
+        {t:"slide",i:7},
+        {t:"ul",x:["<strong>Jawa Barat</strong> leads in total transactions — by a significant margin. It's not close.","Sumatera Utara and Jawa Tengah follow, but at levels that barely register on the same chart.","This concentration is a risk. Revenue is heavily dependent on a single region's performance."]},
+        {t:"p",x:"At the branch level, two branch types drive the overwhelming majority of transactions: Kimia Farma Klinik & Apotek and Kimia Farma Klinik-Apotek-Laboratorio. The standalone Apotek branches contribute minimally by comparison."},
+        {t:"slide",i:8},
+        {t:"h2",x:"Chapter 3 — Understanding the Relationship"},
+        {t:"p",x:"The dashboard surfaced one of the more unexpected findings: the Branch Rate vs. Transaction Rate relationship. Across all three branch types, the ratio of transactions to branch count is essentially identical."},
+        {t:"slide",i:9},
+        {t:"p",x:"This tells a precise story: <strong>branch presence directly correlates with transaction volume</strong>, with no meaningful influence from local demand differences, regional demographics, or promotional activity. The branches are uniform in their transaction output."},
+        {t:"p",x:"The implication is that revenue differences between branches don't come from transaction frequency. They come from what's being sold, at what price, to customers with what spending behavior. That's a product and pricing problem, not a distribution problem."},
+        {t:"callout",x:"More branches in the right locations would directly increase transactions. But improving what happens inside each branch — pricing, product mix, customer experience — is what drives revenue per transaction."},
+        {t:"h2",x:"Chapter 4 — Next Steps"},
+        {t:"slide",i:10},
+        {t:"ol",x:["<strong>Evaluate pricing strategies</strong> — determine their impact on revenue distribution across branches and regions","<strong>Analyze customer preferences by region</strong> — optimize product offerings to match local demand, not just national averages","<strong>Explore targeted marketing</strong> — beyond location-based strategies, find what drives higher transaction values for the same customer base"]},
+        {t:"callout",x:"Two centuries of operations. Thousands of branches. Millions of transactions. The data is all there — it just needed a SQL pipeline, a clean table, and a dashboard to start talking."}
+      ]
+    },
+
+    proj6: {
+      title: "PT Sejahtera Bersama Sales Analysis",
+      subtitle: "Making the Numbers Tell",
+      tags: "SQL &middot; Looker Studio &middot; E-Commerce &middot; Sales Analytics",
+      date: "Jan 2025",
+      heroImg: "assets/proj-6.jpg",
+      slides: ["assets/slides/proj6/slide_01.jpg","assets/slides/proj6/slide_02.jpg","assets/slides/proj6/slide_03.jpg","assets/slides/proj6/slide_04.jpg","assets/slides/proj6/slide_05.jpg","assets/slides/proj6/slide_06.jpg","assets/slides/proj6/slide_07.jpg","assets/slides/proj6/slide_08.jpg","assets/slides/proj6/slide_09.jpg","assets/slides/proj6/slide_10.jpg"],
+      slideCaptions: ["Project introduction and scope","Three pillars: master table, viz, recommendations","Workflow overview","Data preparation — primary keys and table relationships","Entity relationship diagram — 4 tables linked","Master table columns and TotalSales formula","Data visualization 1 — sales trends and top products","Data visualization 2 — category and quantity breakdown","Data visualization 3 — city-level revenue and AOV","Recommendations — 7 strategic directions"],
+      body: [
+        {t:"callout",x:"PT Sejahtera Bersama sells robots, drones, eBooks, and kits. The data was sitting in four separate tables. The insights were waiting for a SQL query."},
+        {t:"h2",x:"The Business"},
+        {t:"p",x:"PT Sejahtera Bersama operates in a niche but growing market — robotics, drones, digital products, and specialty kits. The company's challenge wasn't product — it was visibility. Sales data existed across multiple disconnected tables with no unified view. Decisions were being made on intuition where they could have been made on evidence."},
+        {t:"slide",i:0},
+        {t:"h2",x:"Three Deliverables, One Goal"},
+        {t:"slide",i:1},
+        {t:"ol",x:["<strong>Master Table</strong> — a single, analysis-ready dataset joining all four source tables","<strong>Interactive Visualizations</strong> — Looker Studio dashboards that make the data explorable","<strong>Strategic Recommendations</strong> — seven actionable directions backed by the analysis"]},
+        {t:"slide",i:2},
+        {t:"h2",x:"Building the Foundation"},
+        {t:"p",x:"Four tables. Four different primary keys. The first step was understanding how they related to each other, then building the joins that would hold the analysis together."},
+        {t:"ul",x:["<strong>Customers</strong> — keyed on CustomerID","<strong>Products</strong> — keyed on ProdNumber","<strong>Orders</strong> — keyed on OrderID, linking to both Customers and Products","<strong>ProductCategory</strong> — keyed on CategoryID, linked via Products.Category"]},
+        {t:"slide",i:3},
+        {t:"slide",i:4},
+        {t:"h2",x:"The Master Table"},
+        {t:"p",x:"All four tables joined into a single analysis-ready master table. Key calculated field: <strong>TotalSales = OrderQty &times; ProductPrice</strong>. Every downstream visualization and recommendation traces back to this table. Columns: CustomerEmail, CustomerCity, OrderDate, OrderQty, ProductName, ProductPrice, ProductCategoryName, TotalSales."},
+        {t:"slide",i:5},
+        {t:"h2",x:"What the Dashboards Revealed"},
+        {t:"slide",i:6},
+        {t:"ul",x:["Sales trend data shows clear seasonal peaks — exploitable with the right promotional timing","<strong>Robots and Drone Kits</strong> are consistent top-sellers by both volume and revenue","Blueprints and eBooks trail significantly — pricing or positioning may need rethinking"]},
+        {t:"slide",i:7},
+        {t:"p",x:"Product category analysis revealed concentration: two categories drive the majority of revenue. Diversification is a strategic opportunity, not just an aspiration."},
+        {t:"slide",i:8},
+        {t:"p",x:"City-level analysis: <strong>San Rafael</strong> led in average order value. <strong>Washington and Houston</strong> drove total volume. Regional performance differences are large enough to warrant location-specific strategies."},
+        {t:"h2",x:"Seven Strategic Recommendations"},
+        {t:"slide",i:9},
+        {t:"ol",x:["<strong>Leverage high-performing categories</strong> — expand Robots and Drone Kits, introduce premium variants and bundles","<strong>Fix underperforming categories</strong> — test discounting for Blueprints and eBooks, reassess brand fit","<strong>Double down on strong regions</strong> — prioritize Washington and Houston for spend, identify similar cities","<strong>Exploit seasonal peaks</strong> — align inventory and marketing to periods when customers are already buying","<strong>Build retention infrastructure</strong> — loyalty programs for repeat buyers, personalized email for high-value clients","<strong>Raise average order value</strong> — cross-selling strategies, free shipping thresholds that encourage larger baskets","<strong>Establish a data feedback loop</strong> — dashboards should feed back into inventory decisions, not just report on them"]},
+        {t:"callout",x:"The data was always there. It just needed four SQL joins, three dashboards, and seven recommendations to start doing its job."}
+      ]
+    }
+  };
+
+
+  function renderArticle(id) {
+    const d = ARTICLES[id];
+    if (!d) return;
+
+    // Use translated title/subtitle/body based on current language
+    const title    = getArticleTitle(id, currentLang);
+    const subtitle = getArticleSubtitle(id, currentLang);
+    const body     = getArticleBody(id, currentLang);
+
+    let sections = [];
+    let cur = [];
+    for (const b of body) {
+      if (b.t === "slide") {
+        if (cur.length) { sections.push({type:"text", blocks:cur}); cur = []; }
+        sections.push({type:"slide", index:b.i});
+      } else { cur.push(b); }
+    }
+    if (cur.length) sections.push({type:"text", blocks:cur});
+
+    let html = `<div class="modal-hero-img"><img src="${d.heroImg}" alt="${title}"/></div>
+    <div class="modal-article">
+      <div class="article-tag">${d.tags}</div>
+      <h2 class="article-title">${title}</h2>
+      <div class="article-subtitle">${subtitle}</div>
+      <div class="article-meta">
+        <div class="article-meta-item">Published <span>${d.date}</span></div>
+        <div class="article-meta-item">By <span>Bramantyo Raka</span></div>
+        <div class="article-meta-item">Slides <span>${d.slides.length}</span></div>
+      </div>`;
+
+    for (const s of sections) {
+      if (s.type === "slide") {
+        html += `<div class="article-img"><img src="${d.slides[s.index]}" alt="${d.slideCaptions[s.index]||''}" loading="lazy"/><div class="article-img-caption">${d.slideCaptions[s.index]||''}</div></div>`;
+      } else {
+        html += `<div class="article-section">`;
+        for (const b of s.blocks) {
+          if (b.t==="h2") html += `<div class="article-h2">${b.x}</div>`;
+          else if (b.t==="p") html += `<p class="article-p">${b.x}</p>`;
+          else if (b.t==="callout") html += `<div class="article-callout"><p>${b.x}</p></div>`;
+          else if (b.t==="ul") html += `<ul class="article-ul">${b.x.map(i=>`<li>${i}</li>`).join("")}</ul>`;
+          else if (b.t==="ol") html += `<ol class="article-ol">${b.x.map(i=>`<li>${i}</li>`).join("")}</ol>`;
+          else if (b.t==="table") html += `<table class="article-table"><thead><tr>${b.h.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${b.r.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+        }
+        html += `</div>`;
+      }
+    }
+    html += `</div>`;
+    document.getElementById("modalContent").innerHTML = html;
+  }
+
+  const overlay = document.getElementById("modalOverlay");
+  function openModal(id) {
+    renderArticle(id);
+    overlay.classList.add("open");
+    document.body.style.overflow = "hidden";
+    overlay.scrollTop = 0;
+  }
+  function closeModal() {
+    overlay.classList.remove("open");
+    document.body.style.overflow = "";
+  }
+  document.getElementById("modalClose").addEventListener("click", closeModal);
+  overlay.addEventListener("click", e => { if (e.target === overlay) closeModal(); });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+  document.querySelectorAll(".proj-card[data-project]").forEach(c => {
+    c.addEventListener("click", () => openModal(c.dataset.project));
+  });
+</script>
+</body>
+</html>
