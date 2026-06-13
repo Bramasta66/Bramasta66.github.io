@@ -131,13 +131,13 @@
       display: flex; align-items: center; gap: 20px;
     }
     .hero-avatar-wrap {
-      width: 100px; height: 100px; border-radius: 50%;
-      overflow: hidden; flex-shrink: 0; border: 1px solid var(--rule-inv);
+      width: 225px; height: 225px; border-radius: 50%;
+      overflow: hidden; flex-shrink: 0; border: 2px solid var(--rule-inv);
     }
     .hero-avatar-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
     .hero-id-name {
       font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
-      font-size: 19px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 5px;
+      font-size: 17px; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px;
     }
     .hero-id-role { font-size: 11px; color: rgba(242,237,228,0.45); line-height: 1.55; letter-spacing: 0.03em; }
     .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
@@ -411,6 +411,46 @@
       .nav-links{display:none}
     }
     @media(max-width:580px){ .proj-grid{grid-template-columns:1fr} }
+
+    /* ── READ COUNTS ── */
+    .proj-reads {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: rgba(11,11,11,0.3);
+      transition: color 0.3s;
+    }
+    .proj-card:hover .proj-reads { color: rgba(242,237,228,0.35); }
+    .proj-reads-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: currentColor; flex-shrink: 0;
+    }
+
+    /* ── VISITOR COUNTER ── */
+    .visitor-bar {
+      background: var(--ink);
+      padding: 14px var(--gap);
+      display: flex; align-items: center; justify-content: center; gap: 32px;
+      border-top: 1px solid rgba(242,237,228,0.06);
+      flex-wrap: wrap;
+    }
+    .visitor-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(242,237,228,0.3);
+    }
+    .visitor-count {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 16px; letter-spacing: 0.06em;
+      color: rgba(242,237,228,0.6);
+    }
+    .visitor-flags {
+      display: flex; gap: 4px; flex-wrap: wrap; justify-content: center;
+      max-width: 320px;
+    }
+    .visitor-flag {
+      font-size: 16px; line-height: 1;
+      title: attr(data-country);
+    }
 
     /* ── MODAL ARTICLE ── */
     .modal-overlay {
@@ -846,6 +886,7 @@
         <p class="proj-desc" data-proj-desc="0">End-to-end predictive modeling on a 287-employee dataset with 25 features. Identified high-risk employees through engagement scores, tenure, and workload indicators before resignation occurs. Logistic Regression selected for interpretability over tree-based models.</p>
         <div class="proj-foot">
           <span class="proj-tag">Python · ML · HR Analytics</span>
+          <span class="proj-reads"><span class="proj-reads-dot"></span><span id="reads-proj1">—</span> reads</span>
           <span class="proj-arrow">→</span>
         </div>
       </div>
@@ -862,6 +903,7 @@
         <p class="proj-desc" data-proj-desc="1">Unveiled the generational gap in adventure travel ad engagement. Challenged the "young = engaged" assumption — discovered older, lower-frequency internet users click more. Random Forest: 94%, Logistic Regression (scaled): 96% accuracy.</p>
         <div class="proj-foot">
           <span class="proj-tag">Classification · EDA · Marketing</span>
+          <span class="proj-reads"><span class="proj-reads-dot"></span><span id="reads-proj2">—</span> reads</span>
           <span class="proj-arrow">→</span>
         </div>
       </div>
@@ -878,6 +920,7 @@
         <p class="proj-desc" data-proj-desc="2">Customer segmentation via K-Means on 2,240 profiles across 30 attributes. Identified 4 personas: Gourmet Explorers, Digital Diners, Classic Connoisseurs, and Premium Palates — each with distinct marketing strategies. Silhouette score: 0.313.</p>
         <div class="proj-foot">
           <span class="proj-tag">K-Means · Segmentation · Python</span>
+          <span class="proj-reads"><span class="proj-reads-dot"></span><span id="reads-proj3">—</span> reads</span>
           <span class="proj-arrow">→</span>
         </div>
       </div>
@@ -894,6 +937,7 @@
         <p class="proj-desc" data-proj-desc="3">End-to-end EDA and modeling on 466,285 LendingClub records. Applied SMOTE for class imbalance, feature engineering, and redundancy removal. XGBoost AUC-ROC: 0.9872. Logistic Regression (95% accuracy) selected for transparency and interpretability.</p>
         <div class="proj-foot">
           <span class="proj-tag">XGBoost · SMOTE · FinTech</span>
+          <span class="proj-reads"><span class="proj-reads-dot"></span><span id="reads-proj4">—</span> reads</span>
           <span class="proj-arrow">→</span>
         </div>
       </div>
@@ -910,6 +954,7 @@
         <p class="proj-desc" data-proj-desc="4">SQL-based ETL pipeline integrating transaction, product, and branch data. Developed key financial metrics (net sales, gross profit %, net profit). Built Tableau dashboard for executive decision-making across Indonesia's leading pharma company (2020–2023).</p>
         <div class="proj-foot">
           <span class="proj-tag">SQL · Tableau · ETL · Pharma</span>
+          <span class="proj-reads"><span class="proj-reads-dot"></span><span id="reads-proj5">—</span> reads</span>
           <span class="proj-arrow">→</span>
         </div>
       </div>
@@ -926,6 +971,7 @@
         <p class="proj-desc" data-proj-desc="5">Sales performance analytics for a robotics and drone marketplace. Constructed master table from four relational sources, built Looker Studio dashboards for total sales, product categories, and city-level revenue with seven strategic recommendations.</p>
         <div class="proj-foot">
           <span class="proj-tag">SQL · Looker Studio · E-Commerce</span>
+          <span class="proj-reads"><span class="proj-reads-dot"></span><span id="reads-proj6">—</span> reads</span>
           <span class="proj-arrow">→</span>
         </div>
       </div>
@@ -1101,6 +1147,18 @@
 </section>
 
 <!-- FOOTER -->
+<!-- VISITOR BAR -->
+<div class="visitor-bar" id="visitorBar" style="display:none;">
+  <div class="visitor-item">
+    <span>Total Visitors</span>
+    <span class="visitor-count" id="totalVisitors">—</span>
+  </div>
+  <div class="visitor-item">
+    <span>From</span>
+    <div class="visitor-flags" id="visitorFlags"></div>
+  </div>
+</div>
+
 <footer>
   <div class="f-left">Bramantyo Raka</div>
   <div class="f-right">Data Analytics · Telecom Ops · Software Dev · Bekasi, Indonesia</div>
@@ -1691,6 +1749,132 @@
   document.querySelectorAll(".proj-card[data-project]").forEach(c => {
     c.addEventListener("click", () => openModal(c.dataset.project));
   });
+
+  // ── READ COUNTERS (CountAPI) ─────────────────────────────────
+  // Uses countapi.xyz — free, no signup, persists globally
+  const NAMESPACE = 'bramasta66-portfolio-2025';
+  const PROJECTS  = ['proj1','proj2','proj3','proj4','proj5','proj6'];
+
+  async function fetchReadCount(proj) {
+    try {
+      const r = await fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${proj}-reads`);
+      const d = await r.json();
+      return d.value || 0;
+    } catch { return null; }
+  }
+
+  async function incrementReadCount(proj) {
+    try {
+      const r = await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${proj}-reads`);
+      const d = await r.json();
+      const el = document.getElementById(`reads-${proj}`);
+      if (el && d.value) el.textContent = d.value.toLocaleString();
+    } catch {}
+  }
+
+  async function loadAllReadCounts() {
+    for (const proj of PROJECTS) {
+      const count = await fetchReadCount(proj);
+      const el = document.getElementById(`reads-${proj}`);
+      if (el && count !== null) el.textContent = count.toLocaleString();
+    }
+  }
+
+  // ── VISITOR COUNTER BY COUNTRY ───────────────────────────────
+  // Uses ipapi.co (free, 1000 req/day) to detect country
+  // Stores visit log in localStorage, counts globally via CountAPI
+  const COUNTRY_FLAGS = {
+    'ID':'🇮🇩','US':'🇺🇸','GB':'🇬🇧','SA':'🇸🇦','MY':'🇲🇾','SG':'🇸🇬',
+    'AU':'🇦🇺','JP':'🇯🇵','DE':'🇩🇪','NL':'🇳🇱','CA':'🇨🇦','FR':'🇫🇷',
+    'IN':'🇮🇳','AE':'🇦🇪','QA':'🇶🇦','KW':'🇰🇼','PH':'🇵🇭','TH':'🇹🇭',
+    'KR':'🇰🇷','CN':'🇨🇳','BR':'🇧🇷','MX':'🇲🇽','ZA':'🇿🇦','NG':'🇳🇬',
+    'PK':'🇵🇰','BD':'🇧🇩','PS':'🇵🇸','JO':'🇯🇴','EG':'🇪🇬','TR':'🇹🇷',
+  };
+
+  async function trackVisitor() {
+    try {
+      // Only track once per session
+      if (sessionStorage.getItem('visited')) return;
+      sessionStorage.setItem('visited', '1');
+
+      // Get country
+      const r = await fetch('https://ipapi.co/json/');
+      const d = await r.json();
+      const code = d.country_code || 'XX';
+      const name = d.country_name || 'Unknown';
+
+      // Hit total visitor counter
+      fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/total-visitors`);
+
+      // Hit per-country counter
+      fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/country-${code}`);
+
+      // Store country in localStorage for the flag display
+      const stored = JSON.parse(localStorage.getItem('visitor-countries') || '{}');
+      stored[code] = { name, flag: COUNTRY_FLAGS[code] || '🌐', count: (stored[code]?.count || 0) + 1 };
+      localStorage.setItem('visitor-countries', JSON.stringify(stored));
+
+    } catch {}
+  }
+
+  async function loadVisitorStats() {
+    try {
+      // Total count
+      const r = await fetch(`https://api.countapi.xyz/get/${NAMESPACE}/total-visitors`);
+      const d = await r.json();
+      const total = d.value || 0;
+
+      if (total > 0) {
+        document.getElementById('totalVisitors').textContent = total.toLocaleString();
+        document.getElementById('visitorBar').style.display = 'flex';
+      }
+
+      // Show flags from localStorage (countries that have visited from this browser's network)
+      // + fetch top countries from countapi for the ones we know about
+      const known = Object.keys(COUNTRY_FLAGS);
+      const flagsEl = document.getElementById('visitorFlags');
+      const results = [];
+
+      // Check each known country in parallel (limit to avoid rate limiting)
+      const topCountries = ['ID','US','GB','MY','SG','AU','SA','AE','IN','PH','DE','NL','JP','KR','BR'];
+      await Promise.all(topCountries.map(async (code) => {
+        try {
+          const r = await fetch(`https://api.countapi.xyz/get/${NAMESPACE}/country-${code}`);
+          const d = await r.json();
+          if (d.value && d.value > 0) {
+            results.push({ code, count: d.value, flag: COUNTRY_FLAGS[code] });
+          }
+        } catch {}
+      }));
+
+      results.sort((a,b) => b.count - a.count);
+
+      if (results.length > 0 && flagsEl) {
+        flagsEl.innerHTML = results.map(r =>
+          `<span class="visitor-flag" title="${r.code}: ${r.count} visit${r.count>1?'s':''}">${r.flag}</span>`
+        ).join('');
+      }
+    } catch {}
+  }
+
+  // ── WIRE INTO MODAL OPEN ─────────────────────────────────────
+  // Patch openModal to also increment read count
+  const _origOpenModal = openModal;
+  window.openModal = function(id) {
+    _origOpenModal(id);
+    incrementReadCount(id);
+  };
+  document.querySelectorAll('.proj-card[data-project]').forEach(c => {
+    c.removeEventListener('click', c._clickHandler);
+    c._clickHandler = () => window.openModal(c.dataset.project);
+    c.addEventListener('click', c._clickHandler);
+  });
+
+  // ── INIT ─────────────────────────────────────────────────────
+  loadAllReadCounts();
+  trackVisitor();
+  setTimeout(loadVisitorStats, 2000); // slight delay so tracking hits first
+
 </script>
 </body>
 </html>
