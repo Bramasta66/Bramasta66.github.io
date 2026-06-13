@@ -131,7 +131,7 @@
       display: flex; align-items: center; gap: 20px;
     }
     .hero-avatar-wrap {
-      width: 225px; height: 225px; border-radius: 50%;
+      width: 200px; height: 200px; border-radius: 50%;
       overflow: hidden; flex-shrink: 0; border: 2px solid var(--rule-inv);
     }
     .hero-avatar-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
@@ -425,32 +425,6 @@
       background: currentColor; flex-shrink: 0;
     }
 
-    /* ── VISITOR COUNTER ── */
-    .visitor-bar {
-      background: var(--ink);
-      padding: 14px var(--gap);
-      display: flex; align-items: center; justify-content: center; gap: 32px;
-      border-top: 1px solid rgba(242,237,228,0.06);
-      flex-wrap: wrap;
-    }
-    .visitor-item {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
-      text-transform: uppercase; color: rgba(242,237,228,0.3);
-    }
-    .visitor-count {
-      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
-      font-size: 16px; letter-spacing: 0.06em;
-      color: rgba(242,237,228,0.6);
-    }
-    .visitor-flags {
-      display: flex; gap: 4px; flex-wrap: wrap; justify-content: center;
-      max-width: 320px;
-    }
-    .visitor-flag {
-      font-size: 16px; line-height: 1;
-      title: attr(data-country);
-    }
 
     /* ── MODAL ARTICLE ── */
     .modal-overlay {
@@ -689,6 +663,9 @@
     [dir="rtl"] .skill-group-name,
     [dir="rtl"] .lang-badge { font-family: 'Noto Sans Arabic', 'Inter', sans-serif; }
   </style>
+  <!-- GoatCounter Analytics -->
+  <script data-goatcounter="https://bramasta66.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 
@@ -1147,18 +1124,6 @@
 </section>
 
 <!-- FOOTER -->
-<!-- VISITOR BAR -->
-<div class="visitor-bar" id="visitorBar" style="display:none;">
-  <div class="visitor-item">
-    <span>Total Visitors</span>
-    <span class="visitor-count" id="totalVisitors">—</span>
-  </div>
-  <div class="visitor-item">
-    <span>From</span>
-    <div class="visitor-flags" id="visitorFlags"></div>
-  </div>
-</div>
-
 <footer>
   <div class="f-left">Bramantyo Raka</div>
   <div class="f-right">Data Analytics · Telecom Ops · Software Dev · Bekasi, Indonesia</div>
@@ -1750,115 +1715,50 @@
     c.addEventListener("click", () => openModal(c.dataset.project));
   });
 
-  // ── READ COUNTERS (CountAPI) ─────────────────────────────────
-  // Uses countapi.xyz — free, no signup, persists globally
-  const NAMESPACE = 'bramasta66-portfolio-2025';
-  const PROJECTS  = ['proj1','proj2','proj3','proj4','proj5','proj6'];
+  // ── READ COUNTERS (localStorage — instant, no external dep) ──
+  // Counts are per-browser, shown as "X reads" on cards
+  // GoatCounter events track article opens in the analytics dashboard
 
-  async function fetchReadCount(proj) {
-    try {
-      const r = await fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${proj}-reads`);
-      const d = await r.json();
-      return d.value || 0;
-    } catch { return null; }
+  const PROJ_NAMES = {
+    proj1: 'Employee Retention Analysis',
+    proj2: 'Cracking the Ad Click Code',
+    proj3: 'Marketplace of Flavors',
+    proj4: 'Loan Default Storytelling',
+    proj5: 'Kimia Farma Performance',
+    proj6: 'PT Sejahtera Bersama Sales',
+  };
+
+  function getReadCounts() {
+    try { return JSON.parse(localStorage.getItem('proj-reads') || '{}'); }
+    catch { return {}; }
   }
 
-  async function incrementReadCount(proj) {
-    try {
-      const r = await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${proj}-reads`);
-      const d = await r.json();
+  function loadAllReadCounts() {
+    const counts = getReadCounts();
+    Object.keys(PROJ_NAMES).forEach(proj => {
       const el = document.getElementById(`reads-${proj}`);
-      if (el && d.value) el.textContent = d.value.toLocaleString();
-    } catch {}
+      if (el && counts[proj]) el.textContent = counts[proj].toLocaleString();
+    });
   }
 
-  async function loadAllReadCounts() {
-    for (const proj of PROJECTS) {
-      const count = await fetchReadCount(proj);
-      const el = document.getElementById(`reads-${proj}`);
-      if (el && count !== null) el.textContent = count.toLocaleString();
+  function incrementReadCount(proj) {
+    const counts = getReadCounts();
+    counts[proj] = (counts[proj] || 0) + 1;
+    try { localStorage.setItem('proj-reads', JSON.stringify(counts)); } catch {}
+    const el = document.getElementById(`reads-${proj}`);
+    if (el) el.textContent = counts[proj].toLocaleString();
+
+    // Also fire a GoatCounter event so article opens show in your dashboard
+    if (window.goatcounter && window.goatcounter.count) {
+      window.goatcounter.count({
+        path:  `article/${proj}`,
+        title: PROJ_NAMES[proj],
+        event: true,
+      });
     }
   }
 
-  // ── VISITOR COUNTER BY COUNTRY ───────────────────────────────
-  // Uses ipapi.co (free, 1000 req/day) to detect country
-  // Stores visit log in localStorage, counts globally via CountAPI
-  const COUNTRY_FLAGS = {
-    'ID':'🇮🇩','US':'🇺🇸','GB':'🇬🇧','SA':'🇸🇦','MY':'🇲🇾','SG':'🇸🇬',
-    'AU':'🇦🇺','JP':'🇯🇵','DE':'🇩🇪','NL':'🇳🇱','CA':'🇨🇦','FR':'🇫🇷',
-    'IN':'🇮🇳','AE':'🇦🇪','QA':'🇶🇦','KW':'🇰🇼','PH':'🇵🇭','TH':'🇹🇭',
-    'KR':'🇰🇷','CN':'🇨🇳','BR':'🇧🇷','MX':'🇲🇽','ZA':'🇿🇦','NG':'🇳🇬',
-    'PK':'🇵🇰','BD':'🇧🇩','PS':'🇵🇸','JO':'🇯🇴','EG':'🇪🇬','TR':'🇹🇷',
-  };
-
-  async function trackVisitor() {
-    try {
-      // Only track once per session
-      if (sessionStorage.getItem('visited')) return;
-      sessionStorage.setItem('visited', '1');
-
-      // Get country
-      const r = await fetch('https://ipapi.co/json/');
-      const d = await r.json();
-      const code = d.country_code || 'XX';
-      const name = d.country_name || 'Unknown';
-
-      // Hit total visitor counter
-      fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/total-visitors`);
-
-      // Hit per-country counter
-      fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/country-${code}`);
-
-      // Store country in localStorage for the flag display
-      const stored = JSON.parse(localStorage.getItem('visitor-countries') || '{}');
-      stored[code] = { name, flag: COUNTRY_FLAGS[code] || '🌐', count: (stored[code]?.count || 0) + 1 };
-      localStorage.setItem('visitor-countries', JSON.stringify(stored));
-
-    } catch {}
-  }
-
-  async function loadVisitorStats() {
-    try {
-      // Total count
-      const r = await fetch(`https://api.countapi.xyz/get/${NAMESPACE}/total-visitors`);
-      const d = await r.json();
-      const total = d.value || 0;
-
-      if (total > 0) {
-        document.getElementById('totalVisitors').textContent = total.toLocaleString();
-        document.getElementById('visitorBar').style.display = 'flex';
-      }
-
-      // Show flags from localStorage (countries that have visited from this browser's network)
-      // + fetch top countries from countapi for the ones we know about
-      const known = Object.keys(COUNTRY_FLAGS);
-      const flagsEl = document.getElementById('visitorFlags');
-      const results = [];
-
-      // Check each known country in parallel (limit to avoid rate limiting)
-      const topCountries = ['ID','US','GB','MY','SG','AU','SA','AE','IN','PH','DE','NL','JP','KR','BR'];
-      await Promise.all(topCountries.map(async (code) => {
-        try {
-          const r = await fetch(`https://api.countapi.xyz/get/${NAMESPACE}/country-${code}`);
-          const d = await r.json();
-          if (d.value && d.value > 0) {
-            results.push({ code, count: d.value, flag: COUNTRY_FLAGS[code] });
-          }
-        } catch {}
-      }));
-
-      results.sort((a,b) => b.count - a.count);
-
-      if (results.length > 0 && flagsEl) {
-        flagsEl.innerHTML = results.map(r =>
-          `<span class="visitor-flag" title="${r.code}: ${r.count} visit${r.count>1?'s':''}">${r.flag}</span>`
-        ).join('');
-      }
-    } catch {}
-  }
-
   // ── WIRE INTO MODAL OPEN ─────────────────────────────────────
-  // Patch openModal to also increment read count
   const _origOpenModal = openModal;
   window.openModal = function(id) {
     _origOpenModal(id);
@@ -1872,8 +1772,6 @@
 
   // ── INIT ─────────────────────────────────────────────────────
   loadAllReadCounts();
-  trackVisitor();
-  setTimeout(loadVisitorStats, 2000); // slight delay so tracking hits first
 
 </script>
 </body>
