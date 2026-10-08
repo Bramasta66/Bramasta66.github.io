@@ -379,6 +379,43 @@
       font-size: clamp(96px,15vw,180px); line-height: 0.88; letter-spacing: 0.01em;
       color: rgba(242,237,228,0.06); margin-bottom: 36px; text-transform: uppercase;
     }
+
+    /* ── VISITOR MAP ── */
+    .visitor-map {
+      margin-bottom: 36px;
+    }
+    .visitor-map-label {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(242,237,228,0.3); margin-bottom: 18px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .visitor-map-label::before {
+      content: ''; display: block; width: 20px; height: 1px;
+      background: rgba(242,237,228,0.2);
+    }
+    .visitor-rows { display: flex; flex-direction: column; gap: 10px; }
+    .visitor-row {
+      display: grid; grid-template-columns: 20px 1fr auto;
+      align-items: center; gap: 12px;
+    }
+    .visitor-flag { font-size: 16px; line-height: 1; }
+    .visitor-bar-wrap {
+      height: 2px; background: rgba(242,237,228,0.08); border-radius: 1px; overflow: hidden;
+    }
+    .visitor-bar {
+      height: 100%; background: rgba(242,237,228,0.35); border-radius: 1px;
+      width: 0; transition: width 1s ease;
+    }
+    .visitor-count {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+      font-size: 11px; letter-spacing: 0.08em;
+      color: rgba(242,237,228,0.4); min-width: 24px; text-align: right;
+    }
+    .visitor-map-loading {
+      font-size: 11px; letter-spacing: 0.08em;
+      color: rgba(242,237,228,0.2); font-family: 'Barlow Condensed', sans-serif;
+    }
     .availability-badge {
       display: inline-flex; align-items: center; gap: 10px;
       padding: 12px 20px; border: 1px solid var(--rule-inv);
@@ -1116,7 +1153,12 @@
         </div>
       </div>
       <div class="contact-right reveal d2">
-        <div class="contact-big-num">BRAM</div>
+        <div class="visitor-map" id="visitorMap">
+          <div class="visitor-map-label">Visitors by Country</div>
+          <div class="visitor-rows" id="visitorRows">
+            <div class="visitor-map-loading">Loading...</div>
+          </div>
+        </div>
         <div class="availability-badge">
           <span class="dot-pulse"></span>
           Open to opportunities &amp; collaborations
@@ -1753,6 +1795,58 @@
   document.querySelectorAll(".proj-card[data-project]").forEach(c => {
     c.addEventListener("click", () => openModal(c.dataset.project));
   });
+
+  // ── VISITOR COUNTRY TRACKER ───────────────────────────────────
+  // Detects each visitor's country via ipwho.is (free, no key needed),
+  // stores an aggregate tally in localStorage, renders top countries as bars.
+  // Per-browser only — counts visits from THIS device across sessions.
+
+  async function loadVisitorCountries() {
+    const el = document.getElementById('visitorRows');
+    if (!el) return;
+
+    try {
+      // 1. Detect current visitor's country
+      const geo = await fetch('https://ipwho.is/').then(r => r.json());
+      const code = (geo.country_code || '').toUpperCase();
+      const name = geo.country || code;
+      const flag = code ? String.fromCodePoint(...[...code].map(c => 0x1F1E0 - 65 + c.charCodeAt(0))) : '🌐';
+
+      // 2. Store in localStorage aggregate
+      let tally = {};
+      try { tally = JSON.parse(localStorage.getItem('visitor-countries') || '{}'); } catch {}
+      if (code) {
+        tally[code] = tally[code] || { name, flag, count: 0 };
+        tally[code].count += 1;
+        try { localStorage.setItem('visitor-countries', JSON.stringify(tally)); } catch {}
+      }
+
+      // 3. Render top 6 countries
+      const sorted = Object.values(tally).sort((a,b) => b.count - a.count).slice(0, 6);
+      if (!sorted.length) { el.innerHTML = '<div class="visitor-map-loading">No visits yet</div>'; return; }
+
+      const max = sorted[0].count;
+      el.innerHTML = sorted.map(c => {
+        const pct = Math.round((c.count / max) * 100);
+        return `<div class="visitor-row">
+          <span class="visitor-flag" title="${c.name}">${c.flag}</span>
+          <div class="visitor-bar-wrap"><div class="visitor-bar" data-pct="${pct}"></div></div>
+          <span class="visitor-count">${c.count}</span>
+        </div>`;
+      }).join('');
+
+      // Animate bars in next frame
+      requestAnimationFrame(() => {
+        el.querySelectorAll('.visitor-bar').forEach(b => {
+          b.style.width = b.dataset.pct + '%';
+        });
+      });
+
+    } catch {
+      el.innerHTML = '<div class="visitor-map-loading">Stats unavailable</div>';
+    }
+  }
+  loadVisitorCountries();
 
   // ── INIT ─────────────────────────────────────────────────────
   loadAllReadCounts();
