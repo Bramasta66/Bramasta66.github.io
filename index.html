@@ -1801,6 +1801,12 @@
   // stores an aggregate tally in localStorage, renders top countries as bars.
   // Per-browser only — counts visits from THIS device across sessions.
 
+  function countryFlag(code) {
+    if (!code || code.length !== 2) return '🌐';
+    const o = 0x1F1E6 - 65;
+    return String.fromCodePoint(o + code.charCodeAt(0)) + String.fromCodePoint(o + code.charCodeAt(1));
+  }
+
   async function loadVisitorCountries() {
     const el = document.getElementById('visitorRows');
     if (!el) return;
@@ -1810,13 +1816,17 @@
       const geo = await fetch('https://ipwho.is/').then(r => r.json());
       const code = (geo.country_code || '').toUpperCase();
       const name = geo.country || code;
-      const flag = code ? String.fromCodePoint(...[...code].map(c => 0x1F1E0 - 65 + c.charCodeAt(0))) : '🌐';
+      const flag = countryFlag(code);
 
       // 2. Store in localStorage aggregate
       let tally = {};
-      try { tally = JSON.parse(localStorage.getItem('visitor-countries') || '{}'); } catch {}
+      try {
+        tally = JSON.parse(localStorage.getItem('visitor-countries') || '{}');
+        // Migrate: regenerate flags from code in case old entries have broken emoji
+        Object.keys(tally).forEach(k => { tally[k].code = k; tally[k].flag = countryFlag(k); });
+      } catch {}
       if (code) {
-        tally[code] = tally[code] || { name, flag, count: 0 };
+        tally[code] = tally[code] || { code, name, flag, count: 0 };
         tally[code].count += 1;
         try { localStorage.setItem('visitor-countries', JSON.stringify(tally)); } catch {}
       }
@@ -1828,8 +1838,9 @@
       const max = sorted[0].count;
       el.innerHTML = sorted.map(c => {
         const pct = Math.round((c.count / max) * 100);
+        const renderedFlag = countryFlag(c.code || '') || c.flag || '🌐';
         return `<div class="visitor-row">
-          <span class="visitor-flag" title="${c.name}">${c.flag}</span>
+          <span class="visitor-flag" title="${c.name}">${renderedFlag}</span>
           <div class="visitor-bar-wrap"><div class="visitor-bar" data-pct="${pct}"></div></div>
           <span class="visitor-count">${c.count}</span>
         </div>`;
